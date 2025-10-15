@@ -1,5 +1,6 @@
 import { ProductData } from "../../data/product.js";
 import { ProductView } from "../../ui/product/index.js";
+
 import { htmlToFragment } from "../../lib/utils.js";
 import template from "./template.html?raw";
 
