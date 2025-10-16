@@ -1,15 +1,12 @@
 import { ProductData } from "../../data/product.js";
-import { CardView } from "../../ui/card/index.js";
-
+import { ProductView } from "../../ui/product/index.js";
 import { htmlToFragment } from "../../lib/utils.js";
 import template from "./template.html?raw";
-
 
 
 let M = {
     products: []
 };
-
 
 
 let C = {};
@@ -40,11 +37,10 @@ V.createPageFragment = function( data ){
    let pageFragment = htmlToFragment(template);
    
    // Générer les produits
-   let productsDOM = CardView.dom(data);
+   let productsDOM = ProductView.dom(data);
    
    // Remplacer le slot par les produits
-   pageFragment.querySelector('slot[name="card"]').replaceWith(productsDOM);
-
+   pageFragment.querySelector('slot[name="products"]').replaceWith(productsDOM);
    
    return pageFragment;
 }
