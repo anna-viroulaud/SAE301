@@ -40,7 +40,7 @@ class ProductRepository extends EntityRepository {
         $p = new Product($answer->id);
         $p->setName($answer->name);
         $p->setIdcategory($answer->category);
-        $p->setPrice($answer->price ?? null);
+        $p->setPrice($answer->price );
         $p->setImage($answer->image ?? null);
 
         return $p;
