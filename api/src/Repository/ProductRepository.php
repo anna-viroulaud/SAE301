@@ -40,6 +40,9 @@ class ProductRepository extends EntityRepository {
         $p = new Product($answer->id);
         $p->setName($answer->name);
         $p->setIdcategory($answer->category);
+        $p->setPrice($answer->price ?? null);
+        $p->setImage($answer->image ?? null);
+
         return $p;
     }
 
@@ -53,6 +56,8 @@ class ProductRepository extends EntityRepository {
             $p = new Product($obj->id);
             $p->setName($obj->name);
             $p->setIdcategory($obj->category);
+            $p->setPrice($obj->price);
+            $p->setImage($obj->image);
             array_push($res, $p);
         }
        
@@ -60,11 +65,15 @@ class ProductRepository extends EntityRepository {
     }
 
     public function save($product){
-        $requete = $this->cnx->prepare("insert into Product (name, category) values (:name, :idcategory)");
+        $requete = $this->cnx->prepare("INSERT INTO Product (name, category, price, image) VALUES (:name, :idcategory, :price, :image)");
         $name = $product->getName();
         $idcat = $product->getIdcategory();
+        $price = $product->getPrice();
+        $image = $product->getImage();
         $requete->bindParam(':name', $name );
         $requete->bindParam(':idcategory', $idcat);
+        $requete->bindParam(':price', $price);
+        $requete->bindParam(':image', $image);
         $answer = $requete->execute(); // an insert query returns true or false. $answer is a boolean.
 
         if ($answer){

@@ -1,11 +1,12 @@
+<a href="/products/{{id}}/{{name}}" data-link class="mb-2 inline-block text-blue-600 hover:underline">
+
 <article class="overflow-hidden rounded-lg bg-white p-6 shadow-md transition hover:shadow-lg">
+  <img src="/{{image}}" alt="{{name}}" class="mb-4 h-48 w-full object-cover rounded-md" />
+
   <span class="mb-2 block text-sm font-medium text-gray-500">ID: {{id}}</span>
-  <h3 class="mb-4 text-xl font-bold text-gray-900">{{name}}</h3>
-  <a href="/products/{{id}}/{{name}}" data-link>Voir le détail</a>
-  <button 
-    data-buy="{{id}}" 
-    class="w-full rounded-lg bg-green-600 px-4 py-2 text-white transition hover:bg-green-700"
-  >
-    Acheter
-  </button>
-</article>
+  <h3 class="mb-2 text-xl font-bold text-gray-900">{{name}}</h3>
+
+  <p class="mb-4 text-lg font-semibold text-green-700">
+    {{price}} € <span class="text-sm text-gray-500"></span>
+  </p>
+</article></a>
