@@ -3,7 +3,6 @@
 require_once("src/Repository/EntityRepository.php");
 require_once("src/Class/Product.php");
 
-
 /**
  *  Classe ProductRepository
  * 
@@ -23,28 +22,30 @@ class ProductRepository extends EntityRepository {
         parent::__construct();
     }
 
-    public function find($id): ?Product{
-        /*
-            La façon de faire une requête SQL ci-dessous est "meilleur" que celle vue
-            au précédent semestre (cnx->query). Notamment l'utilisation de bindParam
-            permet de vérifier que la valeur transmise est "safe" et de se prémunir
-            d'injection SQL.
-        */
-        $requete = $this->cnx->prepare("select * from Product where id=:value"); // prepare la requête SQL
-        $requete->bindParam(':value', $id); // fait le lien entre le "tag" :value et la valeur de $id
-        $requete->execute(); // execute la requête
+    /**
+     * Récupère un produit par son id
+     */
+    public function find($id): ?Product {
+        $requete = $this->cnx->prepare("SELECT * FROM Product WHERE id = :value");
+        $requete->bindParam(':value', $id, PDO::PARAM_INT);
+        $requete->execute();
         $answer = $requete->fetch(PDO::FETCH_OBJ);
         
-        if ($answer==false) return null; // may be false if the sql request failed (wrong $id value for example)
+        if ($answer == false) return null;
         
         $p = new Product($answer->id);
         $p->setName($answer->name);
         $p->setIdcategory($answer->category);
+        $p->setPrice($answer->price ?? 0);
+        $p->setImage($answer->image ?? null);
         return $p;
     }
 
+    /**
+     * Récupère tous les produits
+     */
     public function findAll(): array {
-        $requete = $this->cnx->prepare("select * from Product");
+        $requete = $this->cnx->prepare("SELECT * FROM Product");
         $requete->execute();
         $answer = $requete->fetchAll(PDO::FETCH_OBJ);
 
@@ -53,39 +54,78 @@ class ProductRepository extends EntityRepository {
             $p = new Product($obj->id);
             $p->setName($obj->name);
             $p->setIdcategory($obj->category);
-            array_push($res, $p);
+            $p->setPrice($obj->price ?? 0);
+            $p->setImage($obj->image ?? null);
+            $res[] = $p;
         }
        
         return $res;
     }
 
-    public function save($product){
-        $requete = $this->cnx->prepare("insert into Product (name, category) values (:name, :idcategory)");
+    /**
+     * Enregistre un nouveau produit en base
+     */
+    public function save($product): bool {
+        $requete = $this->cnx->prepare("
+            INSERT INTO Product (name, category, price, image)
+            VALUES (:name, :idcategory, :price, :image)
+        ");
+
         $name = $product->getName();
         $idcat = $product->getIdcategory();
-        $requete->bindParam(':name', $name );
+        $price = $product->getPrice();
+        $image = $product->getImage();
+
+        $requete->bindParam(':name', $name);
         $requete->bindParam(':idcategory', $idcat);
-        $answer = $requete->execute(); // an insert query returns true or false. $answer is a boolean.
+        $requete->bindParam(':price', $price);
+        $requete->bindParam(':image', $image);
+
+        $answer = $requete->execute();
 
         if ($answer){
-            $id = $this->cnx->lastInsertId(); // retrieve the id of the last insert query
-            $product->setId($id); // set the product id to its real value.
+            $id = $this->cnx->lastInsertId();
+            $product->setId($id);
             return true;
         }
           
         return false;
     }
 
-    public function delete($id){
-        // Not implemented ! TODO when needed !
-        return false;
+    /**
+     * Supprime un produit
+     */
+    public function delete($id): bool {
+        $requete = $this->cnx->prepare("DELETE FROM Product WHERE id = :id");
+        $requete->bindParam(':id', $id, PDO::PARAM_INT);
+        return $requete->execute();
     }
 
-    public function update($product){
-        // Not implemented ! TODO when needed !
-        return false;
-    }
+    /**
+     * Met à jour un produit existant
+     */
+    public function update($product): bool {
+        $requete = $this->cnx->prepare("
+            UPDATE Product
+            SET name = :name,
+                category = :idcategory,
+                price = :price,
+                image = :image
+            WHERE id = :id
+        ");
 
-   
-    
+        $id = $product->getId();
+        $name = $product->getName();
+        $idcat = $product->getIdcategory();
+        $price = $product->getPrice();
+        $image = $product->getImage();
+
+        $requete->bindParam(':id', $id, PDO::PARAM_INT);
+        $requete->bindParam(':name', $name);
+        $requete->bindParam(':idcategory', $idcat);
+        $requete->bindParam(':price', $price);
+        $requete->bindParam(':image', $image);
+
+        return $requete->execute();
+    }
 }
