@@ -1,12 +1,11 @@
-<a href="/products/{{id}}/{{name}}" data-link class="mb-2 inline-block text-blue-600 hover:underline">
-
-<article class="overflow-hidden rounded-lg bg-white p-6 shadow-md transition hover:shadow-lg">
-  <img src="/{{image}}" alt="{{name}}" class="mb-4 h-48 w-full object-cover rounded-md" />
-
-  <span class="mb-2 block text-sm font-medium text-gray-500">ID: {{id}}</span>
-  <h3 class="mb-2 text-xl font-bold text-gray-900">{{name}}</h3>
-
-  <p class="mb-4 text-lg font-semibold text-green-700">
-    {{price}} € <span class="text-sm text-gray-500"></span>
+<a href="/products/{{id}}/{{name}}" data-link class="mb-2 inline-block">
+ <article class=" overflow-hidden rounded-md transition duration-300">
+  <img src="/{{image}}" alt="{{name}}" class="mb-3 sm:h-70 lg:h-120 w-full object-cover rounded-sm" />
+  <!-- <span class="mb-1 block text-xs font-normal text-gray-400">ID: {{id}}</span> -->
+  <h3 class="mb-1 text-sm font-semibold text-gray-800">{{name}}</h3>
+  <p class="mb-2 text-sm  text-gray-900">
+   {{price}}€
+   <span class="text-sm font-normal text-gray-500"></span>
   </p>
-</article></a>
+ </article>
+</a>

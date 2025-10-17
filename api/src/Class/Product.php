@@ -124,9 +124,10 @@ class Product extends Entity {
     public function getImage(): ?string {
         return $this->image;
     }
+
     public function setImage(?string $image): self
-{
-    $this->image = $image;
-    return $this;
-}
+    {
+        $this->image = $image;
+        return $this;
+    }
 }

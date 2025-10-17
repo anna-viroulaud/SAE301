@@ -1,15 +1,21 @@
-<header style="background: #333; color: white; padding: 1rem;">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2 style="margin: 0;">Click & Collect</h2>
-        <nav style="display: flex; gap: 1rem;">
-            <a href="/" data-link style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Accueil</a>
-            <a href="/products" data-link style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Tous les produits</a>
-            <a href="/about" data-link style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">À propos</a>
+<header class="bg-stone-50 py-4 border-b border-gray-100">
+    <div class="container mx-auto px-6 flex justify-between items-center text-stone-700">
 
-            <!-- Liens par catégorie -->
-            <a href="/categories" data-link style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Bougies</a>
-            <a href="/categories" data-link style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Mobilier</a>
-            <a href="/categories" data-link style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Fournitures</a>
-        </nav>
+        <div class="flex items-center space-x-10">
+            <a href="/" class="text-lg font-normal tracking-widest uppercase hover:text-stone-900">
+                SØSTRENE GRENE
+            </a>
+            
+            <a href="/products" class="text-sm font-semibold uppercase hover:text-stone-900 transition duration-150 hidden sm:block">
+                TOUTES LES CATÉGORIES
+            </a>
+        
+
+            <nav class="flex items-center space-x-8 ml-auto">
+                <a href="/categories/1" data-link class="text-sm font-normal uppercase tracking-wide hover:text-stone-900 transition duration-150 hidden md:block">BOUGIES</a>
+                <a href="/categories/2" data-link class="text-sm font-normal uppercase tracking-wide hover:text-stone-900 transition duration-150 hidden md:block">MOBILIER</a>
+                <a href="/categories/3" data-link class="text-sm font-normal uppercase tracking-wide hover:text-stone-900 transition duration-150 hidden md:block">FOURNITURES</a>
+            </nav>
+
     </div>
 </header>

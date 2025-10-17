@@ -23,6 +23,7 @@ class ProductController extends EntityController {
             return $p==null ? false :  $p;
         }
         else{
+          
             // URI is .../products
             $cat = $request->getParam("category"); // is there a category parameter in the request ?
             if ( $cat == false) // no request category, return all products

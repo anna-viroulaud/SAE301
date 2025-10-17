@@ -85,6 +85,26 @@ class ProductRepository extends EntityRepository {
         return false;
     }
 
+    public function findAllByCategory($categoryId): array {
+    
+        $requete = $this->cnx->prepare("select * from Product where category=:categoryId");
+        $requete->bindParam(':categoryId', $categoryId);
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+       
+        $res = [];
+        foreach($answer as $obj){
+            $p = new Product($obj->id);
+            $p->setName($obj->name);
+            $p->setIdcategory($obj->category);
+            $p->setPrice($obj->price);
+            $p->setImage($obj->image);
+            array_push($res, $p);
+        }
+       
+        return $res;
+    }
+
     public function delete($id){
         // Not implemented ! TODO when needed !
         return false;
@@ -95,6 +115,4 @@ class ProductRepository extends EntityRepository {
         return false;
     }
 
-   
-    
 }

@@ -4,6 +4,8 @@ require_once "src/Controller/CategoryController.php";
 require_once "src/Class/HttpRequest.php";
 
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 /** IMPORTANT
  * 
@@ -28,7 +30,6 @@ require_once "src/Class/HttpRequest.php";
  */
 $router = [
     "products" => new ProductController(),
-    "categories" => new CategoryController()
 ];
 
 // objet HttpRequest qui contient toutes les infos utiles sur la requêtes (voir class/HttpRequest.php)

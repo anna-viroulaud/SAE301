@@ -1,4 +1,5 @@
 import { ProductData } from "../../data/product.js";
+import { CategoryData } from "../../data/category.js";
 import { ProductView } from "../../ui/product/index.js";
 import { htmlToFragment } from "../../lib/utils.js";
 import template from "./template.html?raw";
@@ -16,8 +17,12 @@ C.handler_clickOnProduct = function (ev) {
   }
 };
 
-C.init = async function () {
-  M.products = await ProductData.fetchAll();
+C.init = async function (params) {
+  if (params?.id) {
+    M.products = await CategoryData.fetchByCategory(params.id);
+  } else {
+    M.products = await ProductData.fetchAll();
+  }
   return V.init(M.products);
 };
 
@@ -50,5 +55,5 @@ V.attachEvents = function (pageFragment) {
 
 export function ProductsPage(params) {
   console.log("ProductsPage", params);
-  return C.init();
+  return C.init(params); 
 }
