@@ -42,6 +42,7 @@ class ProductRepository extends EntityRepository {
         $p->setIdcategory($answer->category);
         $p->setPrice($answer->price );
         $p->setImage($answer->image ?? null);
+        $p->setDescription($answer->description ?? null);
 
         return $p;
     }
@@ -58,6 +59,7 @@ class ProductRepository extends EntityRepository {
             $p->setIdcategory($obj->category);
             $p->setPrice($obj->price);
             $p->setImage($obj->image);
+            $p->setDescription($obj->description ?? null);
             array_push($res, $p);
         }
        
@@ -99,6 +101,7 @@ class ProductRepository extends EntityRepository {
             $p->setIdcategory($obj->category);
             $p->setPrice($obj->price);
             $p->setImage($obj->image);
+            $p->setDescription($obj->description ?? null);
             array_push($res, $p);
         }
        
