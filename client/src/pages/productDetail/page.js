@@ -1,8 +1,8 @@
 import { ProductData } from "../../data/product.js";
+import { ProductImageData } from "../../data/productImage.js"; // <-- ajout
 import { htmlToFragment } from "../../lib/utils.js";
 import { DetailView } from "../../ui/detail/index.js";
 import template from "./template.html?raw";
-
 
 let M = {
     products: []
@@ -11,7 +11,6 @@ let M = {
 M.getProductById = function(id){
     return M.products.find(product => product.id == id);
 }
-
 
 let C = {};
 
@@ -31,10 +30,12 @@ C.init = async function(params) {
     
     let p = M.getProductById(productId);
     console.log("Product loaded:", p);
-    
+
+    // Charger toutes les images liées au produit
+    p.images = await ProductImageData.fetchByProductId(productId);
+
     return V.init(p);
 }
-
 
 let V = {};
 
@@ -60,7 +61,7 @@ V.createPageFragment = function(data) {
 V.attachEvents = function(pageFragment) {
     // Attacher un event listener au bouton
     const addToCartBtn = pageFragment.querySelector('[data-buy]');
-    addToCartBtn.addEventListener('click', C.handler_clickOnProduct);
+    if (addToCartBtn) addToCartBtn.addEventListener('click', C.handler_clickOnProduct);
     return pageFragment;
 }
 
