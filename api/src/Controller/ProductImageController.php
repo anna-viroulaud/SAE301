@@ -1,5 +1,5 @@
 <?php
-// Assurez-vous que les chemins sont corrects selon votre arborescence
+
 require_once "src/Controller/EntityController.php"; 
 require_once "src/Repository/ProductImageRepository.php" ;
 require_once "src/Class/ProductImage.php"; 

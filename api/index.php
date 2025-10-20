@@ -1,13 +1,14 @@
 <?php
 require_once "src/Controller/ProductController.php";
-
 require_once "src/Controller/ProductImageController.php";
-
+require_once "src/Controller/UserController.php";
 require_once "src/Class/HttpRequest.php";
 
+session_start();
 
-error_reporting(E_ALL);
 ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 /** IMPORTANT
  * 
@@ -33,6 +34,7 @@ ini_set('display_errors', 1);
 $router = [
     "products" => new ProductController(),
     "productimages" => new ProductImageController(),
+    "users" => new UserController() 
 ];
 
 // objet HttpRequest qui contient toutes les infos utiles sur la requêtes (voir class/HttpRequest.php)
