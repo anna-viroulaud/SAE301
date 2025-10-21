@@ -1,11 +1,10 @@
 <a href="/products/{{id}}/{{name}}" data-link class="mb-2 inline-block">
- <article class=" overflow-hidden rounded-md transition duration-300">
-  <img src="/{{image}}" alt="{{name}}" class="mb-3 sm:h-70 lg:h-120 w-full object-cover rounded-sm" />
-  <!-- <span class="mb-1 block text-xs font-normal text-gray-400">ID: {{id}}</span> -->
-  <h3 class="mb-1 text-sm font-semibold text-gray-800">{{name}}</h3>
-  <p class="mb-2 text-sm  text-gray-900">
-   {{price}}€
-   <span class="text-sm font-normal text-gray-500"></span>
-  </p>
- </article>
+    <article class="overflow-hidden rounded-md transition duration-300 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+        <img src="/{{image}}" alt="{{name}}" class="mb-3 sm:h-70 lg:h-120 w-full object-cover rounded-sm" />
+        <h3 class="mb-1 text-sm font-semibold text-gray-800">{{name}}</h3>
+        <p class="mb-2 text-sm text-gray-900">
+        {{price}}€
+        <span class="text-sm font-normal text-gray-500"></span>
+        </p>
+    </article>
 </a>
