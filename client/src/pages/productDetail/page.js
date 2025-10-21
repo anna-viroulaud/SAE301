@@ -1,5 +1,4 @@
 import { ProductData } from "../../data/product.js";
-import { ProductImageData } from "../../data/productImage.js"; // <-- ajout
 import { htmlToFragment } from "../../lib/utils.js";
 import { DetailView } from "../../ui/detail/index.js";
 import template from "./template.html?raw";
@@ -31,9 +30,7 @@ C.init = async function(params) {
     let p = M.getProductById(productId);
     console.log("Product loaded:", p);
 
-    // Charger toutes les images liées au produit
-    p.images = await ProductImageData.fetchByProductId(productId);
-
+  
     return V.init(p);
 }
 

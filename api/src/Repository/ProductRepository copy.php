@@ -44,27 +44,52 @@ class ProductRepository extends EntityRepository {
         $p->setImage($answer->image ?? null);
         $p->setDescription($answer->description ?? null);
 
+        $requete = $this->cnx->prepare("select * from ProductImage where product_id=:value"); // prepare la requête SQL
+        $productId = $p->getId();
+        $imgReq->bindParam(':value', $productId);
+        $imgReq->execute(); // execute la requête
+        $imgAnswer = $imgReq->fetch(PDO::FETCH_OBJ);
+
+        while ($imgAnswer != false) {
+            $url = $imgAnswer->url;
+            $p->addProductImage($url);
+            $imgAnswer = $imgReq->fetch(PDO::FETCH_OBJ);
+        }
+
         return $p;
     }
 
     public function findAll(): array {
-        $requete = $this->cnx->prepare("select * from Product");
-        $requete->execute();
-        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+    $requete = $this->cnx->prepare("select * from Product");
+    $requete->execute();
+    $answer = $requete->fetchAll(PDO::FETCH_OBJ);
 
-        $res = [];
-        foreach($answer as $obj){
-            $p = new Product($obj->id);
-            $p->setName($obj->name);
-            $p->setIdcategory($obj->category);
-            $p->setPrice($obj->price);
-            $p->setImage($obj->image);
-            $p->setDescription($obj->description ?? null);
-            array_push($res, $p);
+    $res = [];
+    foreach($answer as $obj){
+        $p = new Product($obj->id);
+        $p->setName($obj->name);
+        $p->setIdcategory($obj->category);
+        $p->setPrice($obj->price);
+        $p->setImage($obj->image);
+        $p->setDescription($obj->description ?? null);
+
+        // --- Ajout des images pour chaque produit ---
+        $imgReq = $this->cnx->prepare("select * from ProductImage where product_id=:value");
+        $productId = $p->getId();
+        $imgReq->bindParam(':value', $productId);
+        $imgReq->execute();
+        $imgAnswer = $imgReq->fetch(PDO::FETCH_OBJ);
+        while ($imgAnswer != false) {
+            $url = $imgAnswer->url;
+            $p->addProductImage($url);
+            $imgAnswer = $imgReq->fetch(PDO::FETCH_OBJ);
         }
-       
-        return $res;
+
+        array_push($res, $p);
     }
+
+    return $res;
+}
 
     public function save($product){
         $requete = $this->cnx->prepare("INSERT INTO Product (name, category, price, image) VALUES (:name, :idcategory, :price, :image)");

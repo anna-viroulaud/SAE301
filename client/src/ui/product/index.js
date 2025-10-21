@@ -3,17 +3,17 @@ import template from "./template.html?raw";
 
 let ProductView = {
   html: function (data) {
-    let htmlString = '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">';
+    // Ne pas ajouter de <div> grid ici !
+    let htmlString = '';
     for (let obj of data) {
       htmlString  += genericRenderer(template, obj);
     }
-    return htmlString + '</div>';
+    return htmlString;
   },
 
   dom: function (data) {
     return htmlToFragment( ProductView.html(data) );
   }
-
 };
 
 export { ProductView };

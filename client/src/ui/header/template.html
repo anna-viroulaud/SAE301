@@ -1,21 +1,30 @@
 <header class="py-4">
-    <div class="container mx-auto px-6 flex justify-between items-center text-stone-700">
+  <div class="container mx-auto px-6 flex justify-between items-center text-stone-700">
 
-        <div class="flex items-center space-x-10">
-            <a href="/" class="text-lg font-normal tracking-widest uppercase hover:text-stone-900">
-                SØSTRENE GRENE
-            </a>
-            
-            <a href="/products" class="text-sm font-semibold uppercase hover:text-stone-900 transition duration-150 hidden sm:block">
-                TOUTES LES CATÉGORIES
-            </a>
-        
+    <div class="flex items-center space-x-10">
+        <!-- Menu burger (mobile) -->
+    <button id="burgerMenu" class="ml-4 flex flex-col justify-center items-center w-8 h-8 md:hidden focus:outline-none" aria-label="Menu">
+      <span class="block w-6 h-0.5 bg-stone-700 mb-1 rounded"></span>
+      <span class="block w-6 h-0.5 bg-stone-700 mb-1 rounded"></span>
+      <span class="block w-6 h-0.5 bg-stone-700 rounded"></span>
+    </button>
+      <a href="/" class="text-lg font-normal tracking-widest uppercase hover:text-stone-900">
+        SØSTRENE GRENE
+      </a>
+      <a href="/products" class="text-sm font-semibold uppercase hover:text-stone-900 transition duration-150 hidden sm:block">
+        TOUTES LES CATÉGORIES
+      </a>
 
-            <nav class="flex items-center space-x-8 ml-auto">
-                <a href="/categories/1" data-link class="text-sm font-normal uppercase tracking-wide hover:text-stone-900 transition duration-150 hidden md:block">BOUGIES</a>
-                <a href="/categories/2" data-link class="text-sm font-normal uppercase tracking-wide hover:text-stone-900 transition duration-150 hidden md:block">MOBILIER</a>
-                <a href="/categories/3" data-link class="text-sm font-normal uppercase tracking-wide hover:text-stone-900 transition duration-150 hidden md:block">FOURNITURES</a>
-            </nav>
-
+      <nav id="mainNav" class="flex items-center space-x-8 ml-auto hidden md:flex">
+        <a href="/categories/1" data-link class="text-sm font-normal uppercase tracking-wide hover:text-stone-900 transition duration-150">BOUGIES</a>
+        <a href="/categories/2" data-link class="text-sm font-normal uppercase tracking-wide hover:text-stone-900 transition duration-150">MOBILIER</a>
+        <a href="/categories/3" data-link class="text-sm font-normal uppercase tracking-wide hover:text-stone-900 transition duration-150">FOURNITURES</a>
+    </nav>
     </div>
+
+    <!-- Bouton profil -->
+    <button href="/profile" class="ml-4 flex items-center">
+        <img src="/profile.svg" alt=" en contexte" class="h-full w-auto object-contain rounded-sm" />
+    </button>
+  </div>
 </header>

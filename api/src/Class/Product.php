@@ -18,6 +18,7 @@ class Product extends Entity {
     private ?float $price = null;
     private ?string $image = null;
     private ?string $description = null;
+    private array $images = []; // tableau des noms de fichiers des images associées au produit
 
     public function __construct(int $id){
         $this->id = $id;
@@ -131,6 +132,14 @@ class Product extends Entity {
         return $this;
     }
 
+    public function addProductImage(string $url): void {
+        $this->images[] = $url;
+    }
+
+    public function getImages(): array {
+        return $this->images;
+    }
+
     // Implémentation correcte de JsonSerializable : méthode nommée jsonSerialize()
     public function jsonSerialize(): mixed{
         return [
@@ -139,7 +148,8 @@ class Product extends Entity {
             "category" => $this->idcategory,
             "price" => $this->price,
             "image" => $this->image,
-            "description" => $this->description
+            "description" => $this->description,
+            "images" => $this->images
         ];
     }
 
