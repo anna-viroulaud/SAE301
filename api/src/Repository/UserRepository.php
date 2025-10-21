@@ -30,7 +30,7 @@ class UserRepository extends EntityRepository {
 
     public function findByEmail(string $email): ?User {
         $requete = $this->cnx->prepare("SELECT * FROM Users WHERE email=:email LIMIT 1");
-        $requete->bindParam(':email', $email);
+        $requete->bindParam(':email', $email, PDO::PARAM_STR);
         $requete->execute();
         $obj = $requete->fetch(PDO::FETCH_OBJ);
         if ($obj === false) return null;
@@ -41,8 +41,9 @@ class UserRepository extends EntityRepository {
 
     public function save($user) {
         $requete = $this->cnx->prepare(
-            "INSERT INTO Users (username, email, password_hash, created_at) VALUES (:username, :email, :password_hash, NOW())"
+            "INSERT INTO Users (username, email, password_hash) VALUES (:username, :email, :password_hash)"
         );
+
         $username = $user->getUsername();
         $email = $user->getEmail();
         $hash = $user->getPasswordHash();
@@ -79,4 +80,5 @@ class UserRepository extends EntityRepository {
         return $requete->execute();
     }
 }
+
 ?>

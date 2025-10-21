@@ -5,12 +5,19 @@ import { HomePage } from "./pages/home/page.js";
 import { ProductsPage } from "./pages/products/page.js";
 import { ProductDetailPage } from "./pages/productDetail/page.js";
 
+import { LoginPage } from "./pages/login/page.js";
+import { SignupPage } from "./pages/signup/page.js";
+import { ProfilePage } from "./pages/profil/page.js";
+
+
 import { RootLayout } from "./layouts/root/layout.js";
 import { The404Page } from "./pages/404/page.js";
 
 // Exemple d'utilisation avec authentification
 
+// ...
 const router = new Router('app');
+window.router = router;
 
 router.addLayout("/", RootLayout);
 
@@ -23,6 +30,11 @@ router.addRoute("/products/:id/:slug", ProductDetailPage);
 router.addRoute("/products", ProductsPage);
 
 router.addRoute("/categories/:id", ProductsPage);
+
+
+router.addRoute("/login", LoginPage, { useLayout: false });
+router.addRoute("/signup", SignupPage, { useLayout: false });
+router.addRoute("/profile", ProfilePage, { requireAuth: true });
 
 router.addRoute("*", The404Page);
 

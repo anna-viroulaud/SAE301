@@ -1,4 +1,5 @@
 <?php
+
 require_once "src/Controller/EntityController.php";
 require_once "src/Repository/UserRepository.php";
 require_once "src/Class/User.php";
@@ -12,6 +13,7 @@ class UserController extends EntityController {
 
     protected function processGetRequest(HttpRequest $request) {
         $id = $request->getId(); // si URI /api/users/profile -> id = "profile"
+
         if ($id === "profile") {
             if (!isset($_SESSION['user_id'])) {
                 http_response_code(401);
@@ -35,8 +37,17 @@ class UserController extends EntityController {
 
     protected function processPostRequest(HttpRequest $request) {
         $id = $request->getId();
-        $json = $request->getJson();
-        $obj = json_decode($json);
+
+        // Gère JSON ou multipart/form-data
+        if (
+            isset($_SERVER['CONTENT_TYPE']) &&
+            strpos($_SERVER['CONTENT_TYPE'], 'multipart/form-data') !== false
+        ) {
+            $obj = (object)$_POST;
+        } else {
+            $json = $request->getJson();
+            $obj = json_decode($json);
+        }
 
         // LOGIN
         if ($id === "login") {
@@ -71,43 +82,49 @@ class UserController extends EntityController {
         }
 
         // REGISTER (POST /api/users)
-        if (!isset($obj->email) || !isset($obj->password) || !isset($obj->username)) {
-            http_response_code(400);
-            return ["error" => true, "message" => "Nom d'utilisateur, email et mot de passe requis."];
-        }
-        $email = trim($obj->email);
-        $username = trim($obj->username);
-        $password = $obj->password;
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            http_response_code(400);
-            return ["error" => true, "message" => "Format d'email invalide."];
-        }
-        if (strlen($password) < 8) {
-            http_response_code(400);
-            return ["error" => true, "message" => "Le mot de passe doit contenir au moins 8 caractères."];
+        if (!$id) { // $id vide = inscription
+            if (!isset($obj->email) || !isset($obj->password) || !isset($obj->username)) {
+                http_response_code(400);
+                return ["error" => true, "message" => "Nom d'utilisateur, email et mot de passe requis."];
+            }
+            $email = trim($obj->email);
+            $username = trim($obj->username);
+            $password = $obj->password;
+
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                http_response_code(400);
+                return ["error" => true, "message" => "Format d'email invalide."];
+            }
+            if (strlen($password) < 8) {
+                http_response_code(400);
+                return ["error" => true, "message" => "Le mot de passe doit contenir au moins 8 caractères."];
+            }
+
+            if ($this->users->findByEmail($email) !== null) {
+                http_response_code(409);
+                return ["error" => true, "message" => "Un compte avec cet email existe déjà."];
+            }
+
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+            $u = new User(0, $username, $email);
+            $u->setPasswordHash($hash);
+
+            $ok = $this->users->save($u);
+            if (!$ok) {
+                http_response_code(500);
+                return ["error" => true, "message" => "Impossible de créer le compte, réessayez plus tard."];
+            }
+            session_regenerate_id(true);
+            $_SESSION['user_id'] = $u->getId();
+            http_response_code(201);
+            return $u;
         }
 
-        if ($this->users->findByEmail($email) !== null) {
-            http_response_code(409);
-            return ["error" => true, "message" => "Un compte avec cet email existe déjà."];
-        }
-
-        $hash = password_hash($password, PASSWORD_DEFAULT);
-        $u = new User(0, $username, $email);
-        $u->setPasswordHash($hash);
-
-        $ok = $this->users->save($u);
-        if (!$ok) {
-            http_response_code(500);
-            return ["error" => true, "message" => "Impossible de créer le compte, réessayez plus tard."];
-        }
-        session_regenerate_id(true);
-        $_SESSION['user_id'] = $u->getId();
-        http_response_code(201);
-        return $u;
+        // Si aucune action reconnue
+        http_response_code(400);
+        return ["error" => true, "message" => "Requête invalide."];
     }
-
 
 }
 ?>

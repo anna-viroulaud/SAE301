@@ -1,0 +1,33 @@
+<div class="max-w-md mx-auto mt-12 p-8 bg-[#FFFEF8] rounded shadow text-center">
+  <h1 class="text-2xl font-bold mb-8 tracking-widest uppercase text-[#111]">SØSTRENE GRENE</h1>
+  <form id="loginForm" class="space-y-6">
+    <div class="relative">
+      <input type="email" name="email" placeholder="Adresse e-mail" required class="w-full border border-[#b7a99a] p-3 pl-12 rounded focus:outline-none" />
+      <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#b7a99a]">
+        <svg width="18" height="18" fill="none" stroke="currentColor"><path d="M2 4l7 6 7-6" stroke-width="2"/><rect x="2" y="4" width="14" height="10" rx="2" stroke-width="2"/></svg>
+      </span>
+    </div>
+    <div class="relative">
+      <input type="password" name="password" placeholder="Mot de passe" required class="w-full border border-[#b7a99a] p-3 pl-12 rounded focus:outline-none" />
+      <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#b7a99a]">
+        <svg width="18" height="18" fill="none" stroke="currentColor"><circle cx="9" cy="9" r="7" stroke-width="2"/><path d="M9 13v-2a2 2 0 1 0-2-2" stroke-width="2"/></svg>
+      </span>
+     
+    </div>
+    <div class="flex items-center justify-between text-xs text-[#111]">
+      <label class="flex items-center gap-2">
+        <input type="checkbox" class="accent-[#b7a99a]" /> MAINTENIR MA CONNEXION
+      </label>
+      <a href="#" class="underline">MOT DE PASSE OUBLIÉ ?</a>
+    </div>
+    <button type="submit" class="w-full bg-[#5c4433] text-white py-3 rounded uppercase tracking-widest font-semibold">SE CONNECTER</button>
+    <div id="loginError" class="text-red-600 text-sm mt-2"></div>
+  </form>
+  <div class="flex items-center my-8">
+    <hr class="flex-1 border-[#b7a99a]">
+    <span class="mx-4 text-[#b7a99a]">ou</span>
+    <hr class="flex-1 border-[#b7a99a]">
+  </div>
+  <div class="mb-2 text-[#111] font-semibold text-lg uppercase">EST-CE VOTRE PREMIERE VISITE ?</div>
+  <a href="/signup" data-link class="block w-full mt-2 bg-[#f5f1e6] border border-[#b7a99a] text-[#5c4433] py-3 rounded uppercase font-semibold hover:bg-[#f0e9db] transition">INSCRIVEZ-VOUS</a>
+</div>

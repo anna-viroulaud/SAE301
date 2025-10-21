@@ -9,6 +9,10 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 /** IMPORTANT
  * 
  *  De part le .htaccess, toutes les requêtes seront redirigées vers ce fichier index.php

@@ -67,19 +67,22 @@ let postRequest = async function(uri, data){
         body: data
     }
 
-    try{
-        var response = await fetch(API_URL+uri, options); // exécution (asynchrone) de la requête et attente de la réponse
-    }
-    catch(e){
-        console.error("Echec de la requête : " + e); // affichage de l'erreur dans la console
-        return false;
-    }
-    if (response.status != 200){
-        console.error("Erreur de requête : " + response.status); // affichage de l'erreur dans la console
-        return false; // si le serveur a renvoyé une erreur, on retourne false
-    }
-    let $obj = await response.json(); // extraction du json retourné par le serveur (opération asynchrone aussi)
-    return $obj; // et on retourne le tout (response.json() a déjà converti le json en objet Javscript)
+    try {
+    var response = await fetch(API_URL + uri, options);
+  } catch (e) {
+    console.error("Échec de la requête : " + e);
+    return false;
+  }
+
+  let raw = await response.text(); // <-- récupère le texte brut
+  console.log("Réponse brute du serveur :", raw); // <-- affiche dans la console
+
+  try {
+    return JSON.parse(raw); // essaie de parser
+  } catch (e) {
+    console.error("Erreur de parsing JSON :", e);
+    return false;
+  }
 }
 
 

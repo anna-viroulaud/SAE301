@@ -1,0 +1,17 @@
+<div class="max-w-md mx-auto mt-12 p-8 bg-[#FFFEF8] rounded shadow text-center">
+  <h1 class="text-2xl font-bold mb-8 tracking-widest uppercase text-[#111]">Créer un compte</h1>
+  <form id="signupForm" class="space-y-6">
+    <input type="text" name="username" placeholder="Nom d'utilisateur" required class="w-full border border-[#b7a99a] p-3 rounded focus:outline-none" />
+    <input type="email" name="email" placeholder="Adresse e-mail" required class="w-full border border-[#b7a99a] p-3 rounded focus:outline-none" />
+    <input type="password" name="password" placeholder="Mot de passe (min. 8 caractères)" required class="w-full border border-[#b7a99a] p-3 rounded focus:outline-none" minlength="8" />
+    <button type="submit" class="w-full bg-[#5c4433] text-white py-3 rounded uppercase tracking-widest font-semibold">S'INSCRIRE</button>
+    <div id="signupError" class="text-red-600 text-sm mt-2"></div>
+  </form>
+  <div class="flex items-center my-8">
+    <hr class="flex-1 border-[#b7a99a]">
+    <span class="mx-4 text-[#b7a99a]">ou</span>
+    <hr class="flex-1 border-[#b7a99a]">
+  </div>
+  <div class="mb-2 text-[#111] font-semibold text-lg uppercase">Déjà inscrit ?</div>
+  <a href="/login" data-link class="block w-full mt-2 bg-[#f5f1e6] border border-[#b7a99a] text-[#5c4433] py-3 rounded uppercase font-semibold hover:bg-[#f0e9db] transition">SE CONNECTER</a>
+</div>
