@@ -1,35 +1,35 @@
 import template from "./template.html?raw";
-import { postRequest } from "../../lib/api-request.js";
+import { UserData } from "../../data/user.js";
 import { htmlToFragment } from "../../lib/utils.js";
 
 export function SignupPage() {
-  let frag = htmlToFragment(template);
-  let form = frag.querySelector("#signupForm");
-  let errorDiv = frag.querySelector("#signupError");
+  const frag = htmlToFragment(template);
+  const form = frag.querySelector("#signupForm");
+  const errorDiv = frag.querySelector("#signupError");
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     errorDiv.textContent = "";
-    let username = form.username.value.trim();
-    let email = form.email.value.trim();
-    let password = form.password.value;
+
+    const username = form.username.value.trim();
+    const email = form.email.value.trim();
+    const password = form.password.value;
 
     if (!username || !email || !password) {
       errorDiv.textContent = "Veuillez remplir tous les champs.";
       return;
     }
 
-    let formData = new FormData();
-    formData.append("username", username);
-    formData.append("email", email);
-    formData.append("password", password);
-
-let res = await postRequest("users", formData);
+    const res = await UserData.signup({ username, email, password });
 
     if (res && !res.error) {
       sessionStorage.setItem("user", JSON.stringify(res));
-      window.router.setAuth(true);
-      window.router.navigate("/profile");
+      if (window.router && typeof window.router.setAuth === "function") {
+        window.router.setAuth(true);
+        window.router.navigate("/profile");
+      } else {
+        window.location.href = "/profile";
+      }
     } else {
       errorDiv.textContent = res?.message || "Erreur lors de la création du compte.";
     }

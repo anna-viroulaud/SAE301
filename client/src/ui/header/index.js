@@ -10,7 +10,23 @@ let HeaderView = {
   },
 
   dom: function () {
-    return htmlToFragment(template);
+    let frag = htmlToFragment(template);
+
+    // attache le listener sur le bouton profil (compatible avec ton routeur)
+    const btn = frag.querySelector("#btn-profile");
+    if (btn) {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (window.router && typeof window.router.navigate === "function") {
+          window.router.navigate("/profile");
+        } else {
+          // fallback si window.router non défini
+          window.location.href = "/profile";
+        }
+      });
+    }
+
+    return frag;
   }
 };
 

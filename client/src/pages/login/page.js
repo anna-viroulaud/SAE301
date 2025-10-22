@@ -1,34 +1,65 @@
 import template from "./template.html?raw";
-
 import { postRequest } from "../../lib/api-request.js";
 import { htmlToFragment } from "../../lib/utils.js";
 
-export function LoginPage() {
-  let frag = htmlToFragment(template);
-  let form = frag.querySelector("#loginForm");
-  let errorDiv = frag.querySelector("#loginError");
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    errorDiv.textContent = "";
-    let email = form.email.value.trim();
-    let password = form.password.value;
+let C = {};
 
-    if (!email || !password) {
-      errorDiv.textContent = "Veuillez remplir tous les champs.";
-      return;
-    }
+C.handler_submit = async function(ev) {
+  ev.preventDefault();
 
-    let res = await postRequest("users/login", { email, password });
-    if (res && !res.error) {
-      sessionStorage.setItem("user", JSON.stringify(res));
+  const form = ev.target;
+  const errorDiv = form.querySelector("#loginError");
+  errorDiv.textContent = "";
+
+  const email = form.email.value.trim();
+  const password = form.password.value;
+
+  if (!email || !password) {
+    errorDiv.textContent = "Veuillez remplir tous les champs.";
+    return;
+  }
+
+  // Préparer les données à envoyer
+  const formData = new FormData();
+  formData.append("email", email);
+  formData.append("password", password);
+
+  const res = await postRequest("users/login", formData);
+
+  if (res && !res.error) {
+    sessionStorage.setItem("user", JSON.stringify(res));
+
+    if (window.router && typeof window.router.setAuth === "function") {
       window.router.setAuth(true);
       window.router.navigate("/profile");
     } else {
-      errorDiv.textContent = res?.message || "Identifiants incorrects.";
+      window.location.href = "/profile";
     }
-  });
+  } else {
+    errorDiv.textContent = res?.message || "Erreur lors de la connexion.";
+  }
+}
 
+let V = {};
+
+V.createPageFragment = function() {
+  let frag = htmlToFragment(template);
   return frag;
 }
 
+V.attachEvents = function(fragment) {
+  const form = fragment.querySelector("#loginForm");
+  form.addEventListener("submit", C.handler_submit);
+  return fragment;
+}
+
+C.init = function() {
+  const fragment = V.createPageFragment();
+  V.attachEvents(fragment);
+  return fragment;
+}
+
+export function LoginPage(params) {
+  return C.init(params);
+}

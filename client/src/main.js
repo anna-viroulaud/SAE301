@@ -19,6 +19,13 @@ import { The404Page } from "./pages/404/page.js";
 const router = new Router('app');
 window.router = router;
 
+try {
+  const user = sessionStorage.getItem('user');
+  window.router.setAuth(!!user);
+} catch (e) {
+  window.router.setAuth(false);
+}
+
 router.addLayout("/", RootLayout);
 
 router.addRoute("/", HomePage);

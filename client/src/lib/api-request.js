@@ -56,7 +56,7 @@ let getRequest = async function(uri){
  *  La fonction retourne les données après conversion en objet Javascript (ou false si la requête a échoué)
  */
 
-let postRequest = async function(uri, data){
+let postRequest = async function(uri, data,){
     // Défition des options de la requêtes
     let options = {
         credentials: 'include', // inclure les cookies dans la requête
@@ -84,6 +84,36 @@ let postRequest = async function(uri, data){
     return false;
   }
 }
+
+
+let jsonpostRequest = async function(uri, data,){
+    // Défition des options de la requêtes
+    let options = {
+        method: 'POST',
+        Headers: {
+            'Content-Type': 'application/json' // type de données envoyées (nécessaire si upload fichier)
+        },
+        body: data
+    }
+
+    try {
+    var response = await fetch(API_URL + uri, options);
+  } catch (e) {
+    console.error("Échec de la requête : " + e);
+    return false;
+  }
+
+  let raw = await response.text(); // <-- récupère le texte brut
+  console.log("Réponse brute du serveur :", raw); // <-- affiche dans la console
+
+  try {
+    return JSON.parse(raw); // essaie de parser
+  } catch (e) {
+    console.error("Erreur de parsing JSON :", e);
+    return false;
+  }
+}
+
 
 
 
@@ -118,4 +148,4 @@ let patchRequest = async function(uri, data){
 }
 
 
-export {getRequest, postRequest }
+export {getRequest, postRequest, jsonpostRequest }
