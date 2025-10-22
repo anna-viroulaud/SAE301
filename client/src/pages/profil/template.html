@@ -1,5 +1,47 @@
 <div class="max-w-sm mx-auto mt-12 p-6 bg-[#FFFEF8] rounded shadow text-center">
   <h1 class="text-xl font-bold mb-4 tracking-widest uppercase text-[#111]">Mon profil</h1>
-  <div id="profileInfo" class="mb-6"></div>
-  <button id="logoutBtn" class="w-full bg-[#5c4433] text-white py-2 rounded uppercase font-semibold">Se déconnecter</button>
+
+  <div id="profileInfo" class="mb-4 text-left">
+    <!-- rempli par JS : nom / email -->
+  </div>
+
+  <div id="recentActivity" class="mb-4 text-left">
+    <h2 class="font-semibold mb-2">Activité récente</h2>
+    <div id="recentOrders" class="text-sm text-stone-600">Chargement...</div>
+  </div>
+
+  <div class="flex gap-2 mb-4">
+    <button id="editBtn" class="flex-1 bg-[#5c4433] text-white py-2 rounded uppercase font-semibold">Éditer</button>
+    <button id="logoutBtn" class="flex-1 bg-gray-200 py-2 rounded uppercase font-semibold">Se déconnecter</button>
+  </div>
+
+  <!-- Formulaire d'édition, caché par défaut -->
+  <form id="profileEditForm" class="space-y-3 text-left" style="display:none;">
+    <label class="block">
+      <div class="text-sm font-medium mb-1">Nom d'utilisateur</div>
+      <input name="username" type="text" class="w-full border border-[#b7a99a] p-2 rounded" />
+    </label>
+
+    <label class="block">
+      <div class="text-sm font-medium mb-1">Email</div>
+      <input name="email" type="email" class="w-full border border-[#b7a99a] p-2 rounded" />
+    </label>
+
+    <label class="block">
+      <div class="text-sm font-medium mb-1">Nouveau mot de passe (laisser vide pour ne pas changer)</div>
+      <input name="password" type="password" minlength="8" class="w-full border border-[#b7a99a] p-2 rounded" />
+    </label>
+
+    <label class="block">
+      <div class="text-sm font-medium mb-1">Confirmer le mot de passe</div>
+      <input name="password_confirm" type="password" minlength="8" class="w-full border border-[#b7a99a] p-2 rounded" />
+    </label>
+
+    <div id="profileMsg" class="text-sm text-red-600"></div>
+
+    <div class="flex gap-2">
+      <button type="submit" class="flex-1 bg-[#5c4433] text-white py-2 rounded uppercase font-semibold">Enregistrer</button>
+      <button id="cancelEdit" type="button" class="flex-1 bg-gray-200 py-2 rounded">Annuler</button>
+    </div>
+  </form>
 </div>

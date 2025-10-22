@@ -9,6 +9,8 @@ import { LoginPage } from "./pages/login/page.js";
 import { SignupPage } from "./pages/signup/page.js";
 import { ProfilePage } from "./pages/profil/page.js";
 
+import { AccountPage } from "./pages/account/page.js";
+import { OrderPage } from "./pages/order/page.js";
 
 import { RootLayout } from "./layouts/root/layout.js";
 import { The404Page } from "./pages/404/page.js";
@@ -42,6 +44,9 @@ router.addRoute("/categories/:id", ProductsPage);
 router.addRoute("/login", LoginPage, { useLayout: false });
 router.addRoute("/signup", SignupPage, { useLayout: false });
 router.addRoute("/profile", ProfilePage, { requireAuth: true });
+
+router.addRoute("/account", AccountPage, { requireAuth: true });
+router.addRoute("/commandes", OrderPage, { requireAuth: true });
 
 router.addRoute("*", The404Page);
 
