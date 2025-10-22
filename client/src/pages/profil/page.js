@@ -1,5 +1,4 @@
 import template from "./template.html?raw";
-import { getRequest, postRequest } from "../../lib/api-request.js";
 import { htmlToFragment } from "../../lib/utils.js";
 
 export function ProfilePage() {
