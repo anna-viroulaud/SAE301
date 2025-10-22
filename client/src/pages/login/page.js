@@ -1,4 +1,5 @@
 import template from "./template.html?raw";
+import { postRequest } from "../../lib/api-request.js";
 import { htmlToFragment } from "../../lib/utils.js";
 
 let C = {};
