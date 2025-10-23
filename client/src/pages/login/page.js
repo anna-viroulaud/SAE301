@@ -24,10 +24,11 @@ C.handler_submit = async function(ev) {
   formData.append("email", email);
   formData.append("password", password);
 
-  const res = await postRequest("users/login", formData);
+  const res = await postRequest("auth/login", formData);
 
-  if (res && !res.error) {
-    sessionStorage.setItem("user", JSON.stringify(res));
+   if (res && !res.error) {
+     const user = res.user ?? res; // backend peut renvoyer { user: {...} } ou directement l'user
+     sessionStorage.setItem("user", JSON.stringify(user));
 
     if (window.router && typeof window.router.setAuth === "function") {
       window.router.setAuth(true);

@@ -1,6 +1,7 @@
 <?php
 require_once "src/Controller/ProductController.php";
 require_once "src/Controller/UserController.php";
+require_once "src/Controller/AuthController.php";
 require_once "src/Class/HttpRequest.php";
 
 session_start();
@@ -36,7 +37,8 @@ if (session_status() === PHP_SESSION_NONE) {
  */
 $router = [
     "products" => new ProductController(),
-    "users" => new UserController()
+    "users" => new UserController(),
+    "auth" => new AuthController()
 ];
 
 // objet HttpRequest qui contient toutes les infos utiles sur la requêtes (voir class/HttpRequest.php)

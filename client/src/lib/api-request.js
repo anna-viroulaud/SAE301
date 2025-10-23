@@ -143,9 +143,28 @@ let deleteRequest = async function(uri){
  * 
  *  La fonction retourne true ou false selon le succès de l'opération
  */
-let patchRequest = async function(uri, data){
-   // Pas implémenté. TODO if needed.
+let patchRequest = async function(uri, data, opts = {}) {
+  const headers = opts.headers || {};
+  let body;
+  if (data instanceof FormData) {
+    body = data;
+  } else if (opts.json) {
+    headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+    body = JSON.stringify(data);
+  } else {
+    headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+    body = typeof data === 'string' ? data : JSON.stringify(data);
+  }
+  try {
+    var response = await fetch(API_URL + uri, { method: 'PATCH', credentials: 'include', headers, body });
+  } catch (e) {
+    console.error("Échec de la requête :", e);
+    return false;
+  }
+  const raw = await response.text();
+  try { return JSON.parse(raw); } catch (e) { console.error("Parsing JSON :", e); return false; }
 }
 
 
-export {getRequest, postRequest, jsonpostRequest }
+
+export {getRequest, postRequest, jsonpostRequest, patchRequest}
