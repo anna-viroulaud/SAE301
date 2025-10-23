@@ -26,6 +26,74 @@ let HeaderView = {
       });
     }
 
+    // Side menu (off-canvas) for mobile
+    const burger = frag.querySelector("#burgerMenu");
+    const sideMenu = frag.querySelector("#sideMenu");
+    const overlay = frag.querySelector("#mobileNavOverlay");
+    const sideClose = frag.querySelector("#sideClose");
+
+    if (burger && sideMenu && overlay) {
+      let lastFocus = null;
+
+      const openSide = () => {
+        lastFocus = document.activeElement;
+        sideMenu.classList.remove("-translate-x-full");
+        sideMenu.classList.add("translate-x-0");
+        sideMenu.setAttribute("aria-hidden", "false");
+        overlay.classList.remove("hidden");
+        overlay.setAttribute("aria-hidden", "false");
+        burger.setAttribute("aria-expanded", "true");
+        document.documentElement.classList.add("nav-open");
+        sideMenu.focus(); // move focus into menu
+      };
+
+      const closeSide = (returnFocus = true) => {
+        sideMenu.classList.add("-translate-x-full");
+        sideMenu.classList.remove("translate-x-0");
+        sideMenu.setAttribute("aria-hidden", "true");
+        overlay.classList.add("hidden");
+        overlay.setAttribute("aria-hidden", "true");
+        burger.setAttribute("aria-expanded", "false");
+        document.documentElement.classList.remove("nav-open");
+        if (returnFocus && lastFocus) lastFocus.focus();
+      };
+
+      burger.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const open = burger.getAttribute("aria-expanded") === "true";
+        if (open) closeSide();
+        else openSide();
+      });
+
+      overlay.addEventListener("click", () => closeSide());
+      if (sideClose) sideClose.addEventListener("click", () => closeSide());
+
+      // close on link click
+      sideMenu.querySelectorAll("a").forEach((a) => {
+        a.addEventListener("click", () => closeSide());
+      });
+
+      // ESC to close
+      const escHandler = (e) => {
+        if (e.key === "Escape") {
+          // only if menu is open
+          if (sideMenu.getAttribute("aria-hidden") === "false") {
+            closeSide();
+          }
+        }
+      };
+      document.addEventListener("keydown", escHandler);
+
+      // close when clicking outside (in case overlay absent)
+      document.addEventListener("click", (e) => {
+        if (sideMenu.getAttribute("aria-hidden") === "false") {
+          if (!sideMenu.contains(e.target) && !burger.contains(e.target) && !overlay.contains(e.target)) {
+            closeSide();
+          }
+        }
+      });
+    }
+
     return frag;
   }
 };
