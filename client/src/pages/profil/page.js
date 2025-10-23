@@ -1,5 +1,6 @@
 import template from "./template.html?raw";
 import { htmlToFragment } from "../../lib/utils.js";
+import { postRequest } from "../../lib/api-request.js";
 
 export function ProfilePage() {
   let frag = htmlToFragment(template);
@@ -16,7 +17,7 @@ export function ProfilePage() {
   }
 
   frag.querySelector("#logoutBtn").addEventListener("click", async () => {
-    await postRequest("users/logout", {});
+  await postRequest("auth/logout", new FormData());
     sessionStorage.removeItem("user");
     window.router.setAuth(false);
     window.router.navigate("/");
