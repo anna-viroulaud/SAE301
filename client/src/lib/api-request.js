@@ -23,24 +23,25 @@ let API_URL = "http://mmi.unilim.fr/~viroulaud8/api/";
  *  Exemple : let data = await getRequest(http://.../api/products);
  */
 let getRequest = async function(uri){
-
     let options = {
-        method: "GET"
+        method: "GET",
+        credentials: "include",             // <--- envoyer cookies de session
+        headers: { "Accept": "application/json" }
     };
 
     try{
-        var response = await fetch(API_URL+uri, options); // exécution (asynchrone) de la requête et attente de la réponse
+        var response = await fetch(API_URL+uri, options);
     }
     catch(e){
-        console.error("Echec de la requête : "+e); // affichage de l'erreur dans la console
+        console.error("Echec de la requête : "+e);
         return false;
     }
     if (response.status != 200){
-        console.error("Erreur de requête : " + response.status); // affichage de l'erreur dans la console
-        return false; // si le serveur a renvoyé une erreur, on retourne false
-    }  // si le serveur a renvoyé une erreur, on retourne false
-    let $obj = await response.json(); // extraction du json retourné par le serveur (opération asynchrone aussi)
-    return $obj; // et on retourne le tout (response.json() a déjà converti le json en objet Javscript)
+        console.error("Erreur de requête : " + response.status);
+        return false;
+    }
+    let $obj = await response.json();
+    return $obj;
 }
 
 
@@ -86,32 +87,32 @@ let postRequest = async function(uri, data,){
 }
 
 
-let jsonpostRequest = async function(uri, data,){
-    // Défition des options de la requêtes
+let jsonpostRequest = async function(uri, data){
     let options = {
         method: 'POST',
-        Headers: {
-            'Content-Type': 'application/json' // type de données envoyées (nécessaire si upload fichier)
+        credentials: 'include',              // <--- envoyer cookies de session
+        headers: {
+            'Content-Type': 'application/json'
         },
-        body: data
-    }
+        body: JSON.stringify(data)
+    };
 
     try {
-    var response = await fetch(API_URL + uri, options);
-  } catch (e) {
-    console.error("Échec de la requête : " + e);
-    return false;
-  }
+        var response = await fetch(API_URL + uri, options);
+    } catch (e) {
+        console.error("Échec de la requête : " + e);
+        return false;
+    }
 
-  let raw = await response.text(); // <-- récupère le texte brut
-  console.log("Réponse brute du serveur :", raw); // <-- affiche dans la console
+    let raw = await response.text();
+    console.log("Réponse brute du serveur :", raw);
 
-  try {
-    return JSON.parse(raw); // essaie de parser
-  } catch (e) {
-    console.error("Erreur de parsing JSON :", e);
-    return false;
-  }
+    try {
+        return JSON.parse(raw);
+    } catch (e) {
+        console.error("Erreur de parsing JSON :", e);
+        return false;
+    }
 }
 
 
@@ -143,9 +144,28 @@ let deleteRequest = async function(uri){
  * 
  *  La fonction retourne true ou false selon le succès de l'opération
  */
-let patchRequest = async function(uri, data){
-   // Pas implémenté. TODO if needed.
+let patchRequest = async function(uri, data, opts = {}) {
+  const headers = opts.headers || {};
+  let body;
+  if (data instanceof FormData) {
+    body = data;
+  } else if (opts.json) {
+    headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+    body = JSON.stringify(data);
+  } else {
+    headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+    body = typeof data === 'string' ? data : JSON.stringify(data);
+  }
+  try {
+    var response = await fetch(API_URL + uri, { method: 'PATCH', credentials: 'include', headers, body });
+  } catch (e) {
+    console.error("Échec de la requête :", e);
+    return false;
+  }
+  const raw = await response.text();
+  try { return JSON.parse(raw); } catch (e) { console.error("Parsing JSON :", e); return false; }
 }
 
 
-export {getRequest, postRequest, jsonpostRequest }
+
+export {getRequest, postRequest, jsonpostRequest, patchRequest}
