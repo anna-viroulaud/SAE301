@@ -43,8 +43,8 @@ router.addRoute("/categories/:id", ProductsPage);
 
 router.addRoute("/login", LoginPage, { useLayout: false });
 router.addRoute("/signup", SignupPage, { useLayout: false });
-router.addRoute("/profile", ProfilePage, { requireAuth: true });
 
+router.addRoute("/profile", ProfilePage, { requireAuth: true });
 router.addRoute("/account", AccountPage, { requireAuth: true });
 router.addRoute("/commandes", OrderPage, { requireAuth: true });
 
