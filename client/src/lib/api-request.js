@@ -101,17 +101,21 @@ let jsonpostRequest = async function(uri, data){
         var response = await fetch(API_URL + uri, options);
     } catch (e) {
         console.error("Échec de la requête : " + e);
-        return false;
+        throw new Error("Échec de la connexion au serveur");
     }
 
     let raw = await response.text();
     console.log("Réponse brute du serveur :", raw);
 
+    if (!raw || raw.trim() === '') {
+        throw new Error("Le serveur n'a pas renvoyé de réponse");
+    }
+
     try {
         return JSON.parse(raw);
     } catch (e) {
         console.error("Erreur de parsing JSON :", e);
-        return false;
+        throw new Error("Réponse du serveur invalide: " + raw.substring(0, 100));
     }
 }
 

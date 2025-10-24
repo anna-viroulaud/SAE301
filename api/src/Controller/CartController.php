@@ -20,6 +20,38 @@ class CartController extends EntityController {
 
     protected function processGetRequest(HttpRequest $request) {
         $clientId = $request->getParam('clientId') ?? $request->getParam('userId');
+        
+        // US007 : Récupérer les commandes de l'utilisateur si le paramètre orders=true
+        if ($request->getParam('orders') === 'true' && $clientId) {
+            if (!isset($_SESSION['user_id'])) {
+                http_response_code(401);
+                return ["error" => "Vous devez être connecté."];
+            }
+            $orders = $this->repo->getUserOrders((int)$clientId);
+            return $orders;
+        }
+        
+        // US007 : Récupérer une commande spécifique par ID
+        $id = $request->getId();
+        if ($id) {
+            if (!isset($_SESSION['user_id'])) {
+                http_response_code(401);
+                return ["error" => "Vous devez être connecté."];
+            }
+            $order = $this->repo->getOrderDetails($id);
+            if ($order === null) {
+                http_response_code(404);
+                return ["error" => "Commande introuvable."];
+            }
+            // Vérifier que la commande appartient à l'utilisateur
+            if ($order['clientId'] !== $_SESSION['user_id']) {
+                http_response_code(403);
+                return ["error" => "Accès non autorisé."];
+            }
+            return $order;
+        }
+        
+        // Comportement par défaut : récupérer le panier
         if ($clientId) {
             $c = $this->repo->findByUserId((int)$clientId);
             if ($c === null) {
@@ -41,6 +73,26 @@ class CartController extends EntityController {
             return ["error" => "Invalid payload"];
         }
 
+        // US007 : Valider la commande si action=validate
+        if (isset($obj['action']) && $obj['action'] === 'validate') {
+            if (!isset($_SESSION['user_id'])) {
+                http_response_code(401);
+                return ["error" => "Vous devez être connecté pour passer commande."];
+            }
+            
+            $userId = $_SESSION['user_id'];
+            $order = $this->repo->validateOrder($userId);
+            
+            if ($order === null) {
+                http_response_code(400);
+                return ["error" => "Impossible de valider la commande. Votre panier est peut-être vide."];
+            }
+            
+            http_response_code(201);
+            return $order;
+        }
+
+        // Comportement par défaut : sauvegarder le panier
         $clientId = isset($obj['clientId']) ? (int)$obj['clientId'] : (isset($obj['userId']) ? (int)$obj['userId'] : 0);
         $items = isset($obj['items']) && is_array($obj['items']) ? $obj['items'] : [];
 

@@ -2,6 +2,7 @@ import template from "./template.html?raw";
 import { CartData } from "../../data/cart.js";
 import { htmlToFragment } from "../../lib/utils.js";
 import { ProductCartView } from "../../ui/productCart/index.js";
+import { jsonpostRequest } from "../../lib/api-request.js";
 
 
 let C = {};
@@ -46,6 +47,65 @@ C.handlerIncreaseQuantity = function(event){
     V.updateTotalPrice();
 }
 
+// US007 : Handler pour valider la commande
+C.handlerCheckout = async function(event){
+    event.preventDefault();
+    
+    const btn = event.currentTarget;
+    const cartItems = CartData.getCart();
+    
+    if (cartItems.length === 0) {
+        alert("Votre panier est vide");
+        return;
+    }
+    
+    // Vérifier l'authentification
+    const user = sessionStorage.getItem('user');
+    if (!user) {
+        alert("Vous devez être connecté pour passer commande");
+        window.router?.navigate('/login');
+        return;
+    }
+    
+    // Désactiver le bouton pendant le traitement
+    btn.disabled = true;
+    btn.textContent = "Traitement en cours...";
+    
+    try {
+        const userData = JSON.parse(user);
+        const userId = userData.id;
+        
+        console.log("Synchronisation du panier avec le serveur...");
+        await CartData.syncWithServer(userId);
+        
+        console.log("Validation de la commande...");
+        // Appel API pour valider la commande
+        const result = await jsonpostRequest('carts', {
+            action: 'validate'
+        });
+        
+        console.log("Résultat de la validation:", result);
+        
+        if (result && result.orderNumber) {
+            // Vider le panier local
+            CartData.clearCart();
+            
+            // Rediriger vers la page de confirmation
+            window.router?.navigate(`/order-confirmation/${result.id}`);
+        } else {
+            alert(result?.error || "Erreur lors de la validation de la commande");
+            btn.disabled = false;
+            btn.textContent = "COMMANDER";
+        }
+    } catch (error) {
+        console.error("Erreur lors de la validation:", error);
+        console.error("Détails de l'erreur:", error.message);
+        alert(`Une erreur s'est produite: ${error.message || error}`);
+        btn.disabled = false;
+        btn.textContent = "COMMANDER";
+    }
+}
+
 let V = {};
 
 // Fonction utilitaire pour convertir le prix string en number
@@ -73,6 +133,12 @@ V.attachEvents = function(fragment){
         element.querySelector('#decreaseQuantity').addEventListener('click', C.handlerDecreaseQuantity);
         element.querySelector('#increaseQuantity').addEventListener('click', C.handlerIncreaseQuantity);
     });
+    
+    // US007 : Ajouter l'événement pour le bouton de validation
+    const checkoutBtn = fragment.querySelector('#checkoutBtn');
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', C.handlerCheckout);
+    }
 }
 
 V.nbItems = function(fragment){

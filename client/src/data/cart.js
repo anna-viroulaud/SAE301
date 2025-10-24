@@ -81,4 +81,47 @@ CartData.updateQuantity = function(productId, quantity) {
     return cartArray;
 }
 
+/**
+ * Synchroniser le panier local avec le serveur
+ * Convertit les items du localStorage au format API et les envoie
+ */
+CartData.syncWithServer = async function(userId) {
+    const { jsonpostRequest } = await import('../lib/api-request.js');
+    
+    const cartArray = loadRaw();
+    
+    if (!userId || cartArray.length === 0) {
+        console.log("Panier vide ou utilisateur non connecté, rien à synchroniser");
+        return { success: true, message: "Rien à synchroniser" };
+    }
+    
+    // Transformer les items du format localStorage au format API
+    const items = cartArray.map(item => ({
+        variantId: item.id,          // ID du produit/variante
+        productId: item.id,          // Alias pour compatibilité
+        quantity: item.quantity,     // Quantité
+        unitPrice: item.price        // Prix unitaire
+    }));
+    
+    console.log("Synchronisation du panier:", { userId, items });
+    
+    try {
+        const result = await jsonpostRequest('carts', {
+            clientId: userId,
+            items: items
+        });
+        
+        if (result && !result.error) {
+            console.log("Panier synchronisé avec succès");
+            return { success: true, data: result };
+        } else {
+            console.error("Erreur lors de la synchronisation:", result?.error);
+            throw new Error(result?.error || "Erreur lors de la synchronisation");
+        }
+    } catch (error) {
+        console.error("Échec de la synchronisation:", error);
+        throw error;
+    }
+}
+
 export {CartData};
