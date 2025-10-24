@@ -58,6 +58,19 @@ let HeaderView = {
         if (returnFocus && lastFocus) lastFocus.focus();
       };
 
+      const cartBtn = frag.querySelector("#btn-cart");
+      if (cartBtn) {
+        cartBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          // utilise le router global si présent, sinon fallback vers location
+          if (window.router && typeof window.router.navigate === "function") {
+            window.router.navigate("/cart");
+          } else {
+            window.location.href = "/cart";
+          }
+        });
+      }
+
       burger.addEventListener("click", (e) => {
         e.stopPropagation();
         const open = burger.getAttribute("aria-expanded") === "true";
@@ -87,7 +100,11 @@ let HeaderView = {
       // close when clicking outside (in case overlay absent)
       document.addEventListener("click", (e) => {
         if (sideMenu.getAttribute("aria-hidden") === "false") {
-          if (!sideMenu.contains(e.target) && !burger.contains(e.target) && !overlay.contains(e.target)) {
+          if (
+            !sideMenu.contains(e.target) &&
+            !burger.contains(e.target) &&
+            !overlay.contains(e.target)
+          ) {
             closeSide();
           }
         }
@@ -95,8 +112,7 @@ let HeaderView = {
     }
 
     return frag;
-  }
+  },
 };
-
 
 export { HeaderView };

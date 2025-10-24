@@ -1,0 +1,37 @@
+<main class="max-w-7xl mx-auto px-4 py-8">
+  <!-- En-tête du panier -->
+  <header class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
+    <h1 class="text-lg font-medium">Mon Panier (<span id="nbItemsCart">0</span>)</h1>
+    <a
+      href="/products" data-link
+      class="text-sm underline text-gray-600 hover:text-gray-900 mt-2 sm:mt-0"
+      >Continuer mes achats</a
+    >
+  </header>
+
+  <div class="grid lg:grid-cols-3 gap-8">
+    <slot id="listproducts" name="listproducts"> </slot>
+
+    <!-- panneau total stylé proche du PNG -->
+    <aside class="bg-[#efe9dc] rounded-lg shadow-sm p-6 self-start">
+      <h2 class="text-sm font-semibold text-stone-700 mb-4 tracking-wide">TOTAL</h2>
+
+      <div class="text-stone-700 text-sm space-y-3">
+        <hr>
+
+        <div class="flex justify-between border-t border-transparent pt-3">
+          <span class="font-medium text-sm text-stone-700">Montant total</span>
+          <!-- garde l'id totalPrice existant pour ton JS -->
+          <span id="totalPrice" class="font-medium text-stone-800"></span>
+        </div>
+      </div>
+
+      <button
+        id="checkoutBtn"
+        class="mt-6 w-full bg-[#3f2f2a] text-white py-3 rounded shadow-sm hover:opacity-95 transition uppercase tracking-wider"
+      >
+        COMMANDER
+      </button>
+    </aside>
+  </div>
+</main>

@@ -1,14 +1,18 @@
 <?php
-require_once "src/Controller/ProductController.php";
-require_once "src/Controller/UserController.php";
-require_once "src/Controller/AuthController.php";
-require_once "src/Class/HttpRequest.php";
-
-session_start();
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+require_once "src/Controller/ProductController.php";
+require_once "src/Controller/UserController.php";
+require_once "src/Controller/AuthController.php";
+require_once "src/Controller/CartController.php";
+require_once "src/Class/HttpRequest.php";
+
+session_start();
+
+
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -38,7 +42,8 @@ if (session_status() === PHP_SESSION_NONE) {
 $router = [
     "products" => new ProductController(),
     "users" => new UserController(),
-    "auth" => new AuthController()
+    "auth" => new AuthController(),
+    "carts" => new CartController()
 ];
 
 // objet HttpRequest qui contient toutes les infos utiles sur la requêtes (voir class/HttpRequest.php)
@@ -53,19 +58,34 @@ if ($request->getMethod() == "OPTIONS"){
 // on récupère la ressource ciblée par la requête
 $route = $request->getRessources();
 
-if ( isset($router[$route]) ){ // si on a un controleur pour cette ressource
-    $ctrl = $router[$route];  // on le récupère
-    $json = $ctrl->jsonResponse($request); // et on invoque jsonResponse pour obtenir la réponse (json) à la requête (voir class/Controller.php et ProductController.php)
-    if ($json){ 
-        header("Content-type: application/json;charset=utf-8");
-        echo $json;
+try {
+    $route = $request->getRessources();
+
+    if ( isset($router[$route]) ){ 
+        $ctrl = $router[$route];
+        $json = $ctrl->jsonResponse($request);
+        if ($json){
+            header("Content-type: application/json;charset=utf-8");
+            echo $json;
+        } else {
+            http_response_code(404);
+        }
+        die();
     }
-    else{
-        http_response_code(404); // en cas de problème pour produire la réponse, on retourne un 404
-    }
+    http_response_code(404);
     die();
+} catch (Throwable $e) {
+    // En dev : renvoyer l'erreur en JSON pour debug
+    http_response_code(500);
+    header("Content-type: application/json;charset=utf-8");
+    echo json_encode([
+        "error" => true,
+        "message" => $e->getMessage(),
+        "file" => $e->getFile(),
+        "line" => $e->getLine()
+    ]);
+    error_log("API ERROR: ".$e->getMessage()." in ".$e->getFile()." on line ".$e->getLine());
+    exit();
 }
-http_response_code(404); // si on a pas de controlleur pour traiter la requête -> 404
-die();
 
 ?>
