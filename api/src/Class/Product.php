@@ -15,6 +15,10 @@ class Product extends Entity {
     private int $id; // id du produit
     private ?string $name = null; // nom du produit (nullable pour éviter erreur si non initialisé)
     private ?int $idcategory = null; // id de la catégorie du produit (nullable)
+    private ?float $price = null;
+    private ?string $image = null;
+    private ?string $description = null;
+    private array $images = []; // tableau des noms de fichiers des images associées au produit
 
     public function __construct(int $id){
         $this->id = $id;
@@ -50,14 +54,6 @@ class Product extends Entity {
      *  Voir aussi : https://www.php.net/manual/en/class.jsonserializable.php
      *  
      */
-    // Implémentation correcte de JsonSerializable : méthode nommée jsonSerialize()
-    public function jsonSerialize(): mixed{
-        return [
-            "id" => $this->id,
-            "name" => $this->name,
-            "category" => $this->idcategory
-        ];
-    }
 
     /**
      * Get the value of name
@@ -107,4 +103,56 @@ class Product extends Entity {
         $this->id = $id;
         return $this;
     }
+
+    public function getPrice(): ?float {
+        return $this->price;
+    }
+    
+    public function setPrice(?float $price): self {
+        $this->price = $price;
+        return $this;
+    }
+
+    public function getImage(): ?string {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+        return $this;
+    }
+
+    public function getDescription(): ?string {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function addProductImage(string $url): void {
+        $this->images[] = $url;
+    }
+
+    public function getImages(): array {
+        return $this->images;
+    }
+
+    // Implémentation correcte de JsonSerializable : méthode nommée jsonSerialize()
+    public function jsonSerialize(): mixed{
+        return [
+            "id" => $this->id,
+            "name" => $this->name,
+            "category" => $this->idcategory,
+            "price" => $this->price,
+            "image" => $this->image,
+            "description" => $this->description,
+            "images" => $this->images
+        ];
+    }
+
 }
+
+?>

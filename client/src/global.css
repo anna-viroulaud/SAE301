@@ -1,1 +1,41 @@
 @import "tailwindcss";
+@import "./fonts.css";
+
+/* Police par défaut pour tout le site */
+body {
+  font-family: 'Brandon Grotesque', system-ui, sans-serif;
+}
+
+/* Appliquer Gibson aux paragraphes et textes */
+p, input, textarea, select {
+  font-family: 'Gibson', system-ui, sans-serif;
+}
+
+/* Brandon Grotesque pour les titres et boutons */
+h1, h2, h3, h4, h5, h6, button, a {
+  font-family: 'Brandon Grotesque', system-ui, sans-serif;
+}
+
+/* Small custom styles for burger behavior */
+.burger-btn { background: transparent; border: 0; padding: .25rem; display: inline-flex; align-items: center; }
+.site-nav { transition: max-height .28s ease, opacity .18s ease; z-index: 40; }
+
+/* Mobile: hide nav by default (Tailwind 'hidden' used) */
+/* When open, add simple visual */
+.site-nav.open {
+  /* allow scrolling inside menu if long */
+  max-height: 80vh;
+  overflow: auto;
+}
+
+/* Prevent background scroll when menu open */
+.nav-open, .nav-open body {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Ensure nav is visible on md+ via Tailwind utilities, keep this as fallback */
+@media (min-width: 768px) {
+  .site-nav { display: block !important; max-height: none !important; overflow: visible !important; }
+  .burger-btn { display: none !important; }
+}

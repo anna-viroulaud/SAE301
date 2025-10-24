@@ -1,4 +1,17 @@
-<div>
-  <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 2rem; color: #111;">Tous nos produits !</h1>
-  <slot name="products"></slot>
-</div>
+<main class="bg-[#FFFEF8] px-4 sm:px-8 md:px-12 lg:px-20 py-8">
+  <!-- Breadcrumb -->
+  <nav class="mb-4 text-sm" aria-label="Fil d'Ariane" data-breadcrumb>
+    <span class="text-stone-900 font-semibold">Catalogue</span>
+  </nav>
+  
+  <!-- Titre et compteur -->
+  <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <h1 class="text-3xl md:text-4xl font-bold text-[#111]">Notre Catalogue</h1>
+    <p class="text-sm text-stone-600" data-product-count>0 produits</p>
+  </div>
+  
+  <!-- Grille de produits -->
+  <section class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" role="list" aria-label="Liste des produits">
+    <slot name="products"></slot>
+  </section>
+</main>

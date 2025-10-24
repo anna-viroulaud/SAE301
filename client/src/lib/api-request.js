@@ -4,7 +4,7 @@
  */
 
 
-let API_URL = "http://mmi.unilim.fr/~viroulaud8/api/";
+let API_URL = "https://mmi.unilim.fr/~viroulaud8/api/";
 
 
 /**
@@ -23,24 +23,25 @@ let API_URL = "http://mmi.unilim.fr/~viroulaud8/api/";
  *  Exemple : let data = await getRequest(http://.../api/products);
  */
 let getRequest = async function(uri){
-
     let options = {
-        method: "GET"
+        method: "GET",
+        credentials: "include",             // <--- envoyer cookies de session
+        headers: { "Accept": "application/json" }
     };
 
     try{
-        var response = await fetch(API_URL+uri, options); // exécution (asynchrone) de la requête et attente de la réponse
+        var response = await fetch(API_URL+uri, options);
     }
     catch(e){
-        console.error("Echec de la requête : "+e); // affichage de l'erreur dans la console
+        console.error("Echec de la requête : "+e);
         return false;
     }
     if (response.status != 200){
-        console.error("Erreur de requête : " + response.status); // affichage de l'erreur dans la console
-        return false; // si le serveur a renvoyé une erreur, on retourne false
-    }  // si le serveur a renvoyé une erreur, on retourne false
-    let $obj = await response.json(); // extraction du json retourné par le serveur (opération asynchrone aussi)
-    return $obj; // et on retourne le tout (response.json() a déjà converti le json en objet Javscript)
+        console.error("Erreur de requête : " + response.status);
+        return false;
+    }
+    let $obj = await response.json();
+    return $obj;
 }
 
 
@@ -56,7 +57,7 @@ let getRequest = async function(uri){
  *  La fonction retourne les données après conversion en objet Javascript (ou false si la requête a échoué)
  */
 
-let postRequest = async function(uri, data){
+let postRequest = async function(uri, data,){
     // Défition des options de la requêtes
     let options = {
         credentials: 'include', // inclure les cookies dans la requête
@@ -67,20 +68,57 @@ let postRequest = async function(uri, data){
         body: data
     }
 
-    try{
-        var response = await fetch(API_URL+uri, options); // exécution (asynchrone) de la requête et attente de la réponse
-    }
-    catch(e){
-        console.error("Echec de la requête : " + e); // affichage de l'erreur dans la console
-        return false;
-    }
-    if (response.status != 200){
-        console.error("Erreur de requête : " + response.status); // affichage de l'erreur dans la console
-        return false; // si le serveur a renvoyé une erreur, on retourne false
-    }
-    let $obj = await response.json(); // extraction du json retourné par le serveur (opération asynchrone aussi)
-    return $obj; // et on retourne le tout (response.json() a déjà converti le json en objet Javscript)
+    try {
+    var response = await fetch(API_URL + uri, options);
+  } catch (e) {
+    console.error("Échec de la requête : " + e);
+    return false;
+  }
+
+  let raw = await response.text(); // <-- récupère le texte brut
+  console.log("Réponse brute du serveur :", raw); // <-- affiche dans la console
+
+  try {
+    return JSON.parse(raw); // essaie de parser
+  } catch (e) {
+    console.error("Erreur de parsing JSON :", e);
+    return false;
+  }
 }
+
+
+let jsonpostRequest = async function(uri, data){
+    let options = {
+        method: 'POST',
+        credentials: 'include',              // <--- envoyer cookies de session
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    };
+
+    try {
+        var response = await fetch(API_URL + uri, options);
+    } catch (e) {
+        console.error("Échec de la requête : " + e);
+        throw new Error("Échec de la connexion au serveur");
+    }
+
+    let raw = await response.text();
+    console.log("Réponse brute du serveur :", raw);
+
+    if (!raw || raw.trim() === '') {
+        throw new Error("Le serveur n'a pas renvoyé de réponse");
+    }
+
+    try {
+        return JSON.parse(raw);
+    } catch (e) {
+        console.error("Erreur de parsing JSON :", e);
+        throw new Error("Réponse du serveur invalide: " + raw.substring(0, 100));
+    }
+}
+
 
 
 
@@ -110,9 +148,28 @@ let deleteRequest = async function(uri){
  * 
  *  La fonction retourne true ou false selon le succès de l'opération
  */
-let patchRequest = async function(uri, data){
-   // Pas implémenté. TODO if needed.
+let patchRequest = async function(uri, data, opts = {}) {
+  const headers = opts.headers || {};
+  let body;
+  if (data instanceof FormData) {
+    body = data;
+  } else if (opts.json) {
+    headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+    body = JSON.stringify(data);
+  } else {
+    headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+    body = typeof data === 'string' ? data : JSON.stringify(data);
+  }
+  try {
+    var response = await fetch(API_URL + uri, { method: 'PATCH', credentials: 'include', headers, body });
+  } catch (e) {
+    console.error("Échec de la requête :", e);
+    return false;
+  }
+  const raw = await response.text();
+  try { return JSON.parse(raw); } catch (e) { console.error("Parsing JSON :", e); return false; }
 }
 
 
-export {getRequest, postRequest }
+
+export {getRequest, postRequest, jsonpostRequest, patchRequest}

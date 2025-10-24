@@ -1,0 +1,62 @@
+<!-- Profile template — version compacte -->
+<main class="max-w-7xl mx-auto px-4 py-8">
+  <!-- En-tête avec navigation entre profil et commandes -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-6">Mon Compte</h1>
+    
+    <!-- Navigation tabs -->
+    <div class="flex gap-4 border-b border-gray-200">
+      <a href="/profile" data-link class="px-4 py-2 text-[#3f2f2a] border-b-2 border-[#3f2f2a] font-medium">
+        Mes informations
+      </a>
+      <a href="/orders" data-link class="px-4 py-2 text-gray-600 hover:text-gray-900 hover:border-b-2 hover:border-[#3f2f2a] transition">
+        Mes commandes
+      </a>
+    </div>
+  </div>
+
+  <div class="max-w-lg mx-auto p-6 bg-[#FFFEF8] rounded shadow text-left">
+    <h2 class="text-xl font-bold mb-6 tracking-widest uppercase text-[#111]">Informations Personnelles</h2>
+
+  <form id="profileEditForm" class="space-y-4" style="display:block;">
+    <input type="hidden" name="username" />
+
+    <label class="block">
+      <div class="text-sm font-medium mb-1">Adresse e-mail</div>
+      <input name="email" type="email" disabled class="w-full bg-[#f3ecdf] border p-3 rounded text-sm" />
+    </label>
+
+    <label class="block">
+      <div class="text-sm font-medium mb-1">Prénom</div>
+      <input name="firstName" type="text" disabled class="w-full bg-[#f3ecdf] border p-3 rounded text-sm" />
+    </label>
+
+    <label class="block">
+      <div class="text-sm font-medium mb-1">Nom de famille</div>
+      <input name="lastName" type="text" disabled class="w-full bg-[#f3ecdf] border p-3 rounded text-sm" />
+    </label>
+
+    <label class="block">
+      <div class="text-sm font-medium mb-1">Date de naissance (JJ-MM-AAAA)</div>
+      <input name="dob" type="text" placeholder="12-12-2002" disabled class="w-full bg-[#f3ecdf] border p-3 rounded text-sm" />
+    </label>
+
+    <div id="profileMsg" class="text-sm text-red-600"></div>
+
+    <div class="flex gap-2">
+      <button id="modifyBtn" type="submit" class="flex-1 bg-[#5c4433] text-white py-2 rounded uppercase font-semibold" style="display:none;">Enregistrer</button>
+      <button id="cancelEdit" type="button" class="flex-1 bg-gray-200 py-2 rounded" style="display:none;">Annuler</button>
+    </div>
+  </form>
+
+  <div class="mt-6">
+    <h2 class="font-semibold mb-2">Activité récente</h2>
+    <div id="recentOrders" class="text-sm text-stone-600">Aucune commande récente.</div>
+  </div>
+
+  <div class="flex gap-2 mt-6">
+    <button id="editBtn" class="flex-1 bg-[#5c4433] text-white py-2 rounded uppercase font-semibold">Modifier</button>
+    <button id="logoutBtn" class="flex-1 bg-gray-200 py-2 rounded uppercase font-semibold">Se déconnecter</button>
+  </div>
+  </div>
+</main>

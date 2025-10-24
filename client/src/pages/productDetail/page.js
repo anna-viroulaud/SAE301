@@ -1,8 +1,8 @@
 import { ProductData } from "../../data/product.js";
+import { CartData } from "../../data/cart.js";
 import { htmlToFragment } from "../../lib/utils.js";
 import { DetailView } from "../../ui/detail/index.js";
 import template from "./template.html?raw";
-
 
 let M = {
     products: []
@@ -12,13 +12,26 @@ M.getProductById = function(id){
     return M.products.find(product => product.id == id);
 }
 
-
 let C = {};
 
-C.handler_clickOnProduct = function(ev){
-    if (ev.target.dataset.buy!==undefined){
-        let id = ev.target.dataset.buy;
-        alert(`Produit ajouté au panier ! (Quand il y en aura un)`);
+C.handler_clickOnProduct = async function(ev){
+    if (ev.target.dataset.buy !== undefined){
+        const id = ev.target.dataset.buy;
+        const p = M.getProductById(id);
+        if (!p) {
+            alert("Produit introuvable");
+            return;
+        }
+        // normaliser l'objet attendu par CartData
+        await CartData.addToCart({
+            id: p.id,
+            quantity: 1,
+            price: p.price ?? p.prix ?? 0,
+            name: p.name ?? p.title ?? '',
+            image: p.image ?? p.imagePrincipale ?? ''
+        });
+        // Feedback utilisateur (header sera mis à jour via l'événement 'cart:updated')
+        alert("Produit ajouté au panier");
     }
 }
 
@@ -31,10 +44,10 @@ C.init = async function(params) {
     
     let p = M.getProductById(productId);
     console.log("Product loaded:", p);
-    
+
+  
     return V.init(p);
 }
-
 
 let V = {};
 
@@ -60,7 +73,7 @@ V.createPageFragment = function(data) {
 V.attachEvents = function(pageFragment) {
     // Attacher un event listener au bouton
     const addToCartBtn = pageFragment.querySelector('[data-buy]');
-    addToCartBtn.addEventListener('click', C.handler_clickOnProduct);
+    if (addToCartBtn) addToCartBtn.addEventListener('click', C.handler_clickOnProduct);
     return pageFragment;
 }
 

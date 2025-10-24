@@ -40,31 +40,67 @@ class ProductRepository extends EntityRepository {
         $p = new Product($answer->id);
         $p->setName($answer->name);
         $p->setIdcategory($answer->category);
+        $p->setPrice($answer->price );
+        $p->setImage($answer->image ?? null);
+        $p->setDescription($answer->description ?? null);
+
+        $imgReq = $this->cnx->prepare("select * from ProductImage where product_id=:value"); // prepare la requête SQL
+        $productId = $p->getId();
+        $imgReq->bindParam(':value', $productId);
+        $imgReq->execute(); // execute la requête
+        $imgAnswer = $imgReq->fetch(PDO::FETCH_OBJ);
+
+        while ($imgAnswer != false) {
+            $url = $imgAnswer->url;
+            $p->addProductImage($url);
+            $imgAnswer = $imgReq->fetch(PDO::FETCH_OBJ);
+        }
+
         return $p;
     }
 
     public function findAll(): array {
-        $requete = $this->cnx->prepare("select * from Product");
-        $requete->execute();
-        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+    $requete = $this->cnx->prepare("select * from Product");
+    $requete->execute();
+    $answer = $requete->fetchAll(PDO::FETCH_OBJ);
 
-        $res = [];
-        foreach($answer as $obj){
-            $p = new Product($obj->id);
-            $p->setName($obj->name);
-            $p->setIdcategory($obj->category);
-            array_push($res, $p);
+    $res = [];
+    foreach($answer as $obj){
+        $p = new Product($obj->id);
+        $p->setName($obj->name);
+        $p->setIdcategory($obj->category);
+        $p->setPrice($obj->price);
+        $p->setImage($obj->image);
+        $p->setDescription($obj->description ?? null);
+
+        // --- Ajout des images pour chaque produit ---
+        $imgReq = $this->cnx->prepare("select * from ProductImage where product_id=:value");
+        $productId = $p->getId();
+        $imgReq->bindParam(':value', $productId);
+        $imgReq->execute();
+        $imgAnswer = $imgReq->fetch(PDO::FETCH_OBJ);
+        while ($imgAnswer != false) {
+            $url = $imgAnswer->url;
+            $p->addProductImage($url);
+            $imgAnswer = $imgReq->fetch(PDO::FETCH_OBJ);
         }
-       
-        return $res;
+
+        array_push($res, $p);
     }
 
+    return $res;
+}
+
     public function save($product){
-        $requete = $this->cnx->prepare("insert into Product (name, category) values (:name, :idcategory)");
+        $requete = $this->cnx->prepare("INSERT INTO Product (name, category, price, image) VALUES (:name, :idcategory, :price, :image)");
         $name = $product->getName();
         $idcat = $product->getIdcategory();
+        $price = $product->getPrice();
+        $image = $product->getImage();
         $requete->bindParam(':name', $name );
         $requete->bindParam(':idcategory', $idcat);
+        $requete->bindParam(':price', $price);
+        $requete->bindParam(':image', $image);
         $answer = $requete->execute(); // an insert query returns true or false. $answer is a boolean.
 
         if ($answer){
@@ -74,6 +110,27 @@ class ProductRepository extends EntityRepository {
         }
           
         return false;
+    }
+
+    public function findAllByCategory($categoryId): array {
+    
+        $requete = $this->cnx->prepare("select * from Product where category=:categoryId");
+        $requete->bindParam(':categoryId', $categoryId);
+        $requete->execute();
+        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+       
+        $res = [];
+        foreach($answer as $obj){
+            $p = new Product($obj->id);
+            $p->setName($obj->name);
+            $p->setIdcategory($obj->category);
+            $p->setPrice($obj->price);
+            $p->setImage($obj->image);
+            $p->setDescription($obj->description ?? null);
+            array_push($res, $p);
+        }
+       
+        return $res;
     }
 
     public function delete($id){
@@ -86,6 +143,4 @@ class ProductRepository extends EntityRepository {
         return false;
     }
 
-   
-    
 }

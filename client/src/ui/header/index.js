@@ -10,8 +10,154 @@ let HeaderView = {
   },
 
   dom: function () {
-    return htmlToFragment(template);
-  }
+    let frag = htmlToFragment(template);
+
+    // attache le listener sur le bouton profil (compatible avec ton routeur)
+    const btn = frag.querySelector("#btn-profile");
+    if (btn) {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (window.router && typeof window.router.navigate === "function") {
+          window.router.navigate("/profile");
+        } else {
+          // fallback si window.router non défini
+          window.location.href = "/profile";
+        }
+      });
+    }
+
+    // Side menu (off-canvas) for mobile
+    const burger = frag.querySelector("#burgerMenu");
+    const sideMenu = frag.querySelector("#sideMenu");
+    const overlay = frag.querySelector("#mobileNavOverlay");
+    const sideClose = frag.querySelector("#sideClose");
+
+    if (burger && sideMenu && overlay) {
+      let lastFocus = null;
+
+      const openSide = () => {
+        lastFocus = document.activeElement;
+        sideMenu.classList.remove("-translate-x-full");
+        sideMenu.classList.add("translate-x-0");
+        sideMenu.setAttribute("aria-hidden", "false");
+        overlay.classList.remove("hidden");
+        overlay.setAttribute("aria-hidden", "false");
+        burger.setAttribute("aria-expanded", "true");
+        document.documentElement.classList.add("nav-open");
+        sideMenu.focus(); // move focus into menu
+      };
+
+      const closeSide = (returnFocus = true) => {
+        sideMenu.classList.add("-translate-x-full");
+        sideMenu.classList.remove("translate-x-0");
+        sideMenu.setAttribute("aria-hidden", "true");
+        overlay.classList.add("hidden");
+        overlay.setAttribute("aria-hidden", "true");
+        burger.setAttribute("aria-expanded", "false");
+        document.documentElement.classList.remove("nav-open");
+        if (returnFocus && lastFocus) lastFocus.focus();
+      };
+
+      const cartBtn = frag.querySelector("#btn-cart");
+      if (cartBtn) {
+        cartBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          // utilise le router global si présent, sinon fallback vers location
+          if (window.router && typeof window.router.navigate === "function") {
+            window.router.navigate("/cart");
+          } else {
+            window.location.href = "/cart";
+          }
+        });
+      }
+
+      burger.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const open = burger.getAttribute("aria-expanded") === "true";
+        if (open) closeSide();
+        else openSide();
+      });
+
+      overlay.addEventListener("click", () => closeSide());
+      if (sideClose) sideClose.addEventListener("click", () => closeSide());
+
+      // close on link click
+      sideMenu.querySelectorAll("a").forEach((a) => {
+        a.addEventListener("click", () => closeSide());
+      });
+
+      // ESC to close
+      const escHandler = (e) => {
+        if (e.key === "Escape") {
+          // only if menu is open
+          if (sideMenu.getAttribute("aria-hidden") === "false") {
+            closeSide();
+          }
+        }
+      };
+      document.addEventListener("keydown", escHandler);
+
+      // close when clicking outside (in case overlay absent)
+      document.addEventListener("click", (e) => {
+        if (sideMenu.getAttribute("aria-hidden") === "false") {
+          if (
+            !sideMenu.contains(e.target) &&
+            !burger.contains(e.target) &&
+            !overlay.contains(e.target)
+          ) {
+            closeSide();
+          }
+        }
+      });
+    }
+
+    // Mettre à jour le compteur du panier
+    const updateCartCounter = () => {
+      const counter = frag.querySelector("#cart-counter");
+      
+      if (counter) {
+        // Lire directement depuis localStorage
+        const cartData = localStorage.getItem('cart');
+        let cart = [];
+        
+        try {
+          cart = cartData ? JSON.parse(cartData) : [];
+          // S'assurer que c'est un tableau
+          if (!Array.isArray(cart)) {
+            cart = [];
+          }
+        } catch (e) {
+          console.error('Erreur parsing cart:', e);
+          cart = [];
+        }
+        
+        const totalItems = cart.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
+        
+        counter.textContent = totalItems;
+        
+        if (totalItems > 0) {
+          counter.style.display = "flex";
+        } else {
+          counter.style.display = "none";
+        }
+      }
+    };
+
+    // Initialiser le compteur au chargement
+    updateCartCounter();
+
+    // Écouter les mises à jour du panier (événement CustomEvent)
+    window.addEventListener("cart:updated", updateCartCounter);
+    
+    // Écouter les changements du localStorage (pour synchronisation multi-onglets)
+    window.addEventListener("storage", (e) => {
+      if (e.key === 'cart' || e.key === 'cart_lastUpdate') {
+        updateCartCounter();
+      }
+    });
+
+    return frag;
+  },
 };
 
 export { HeaderView };
