@@ -4,7 +4,7 @@
  */
 
 
-let API_URL = "http://mmi.unilim.fr/~viroulaud8/api/";
+let API_URL = "https://mmi.unilim.fr/~viroulaud8/api/";
 
 
 /**

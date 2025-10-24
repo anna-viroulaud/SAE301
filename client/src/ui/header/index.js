@@ -118,7 +118,19 @@ let HeaderView = {
       if (counter) {
         // Lire directement depuis localStorage
         const cartData = localStorage.getItem('cart');
-        const cart = cartData ? JSON.parse(cartData) : [];
+        let cart = [];
+        
+        try {
+          cart = cartData ? JSON.parse(cartData) : [];
+          // S'assurer que c'est un tableau
+          if (!Array.isArray(cart)) {
+            cart = [];
+          }
+        } catch (e) {
+          console.error('Erreur parsing cart:', e);
+          cart = [];
+        }
+        
         const totalItems = cart.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
         
         counter.textContent = totalItems;

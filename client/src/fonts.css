@@ -1,0 +1,197 @@
+/* Brandon Grotesque Font Family */
+@font-face {
+  font-family: 'Brandon Grotesque';
+  src: url('/font/Brandon-Grotesque/Brandon-Grotesque-Thin.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Brandon Grotesque';
+  src: url('/font/Brandon-Grotesque/Brandon-Grotesque-Thin-Italic.otf') format('opentype');
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Brandon Grotesque';
+  src: url('/font/Brandon-Grotesque/Brandon-Grotesque-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Brandon Grotesque';
+  src: url('/font/Brandon-Grotesque/Brandon-Grotesque-Light-Italic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Brandon Grotesque';
+  src: url('/font/Brandon-Grotesque/Brandon-Grotesque-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Brandon Grotesque';
+  src: url('/font/Brandon-Grotesque/Brandon-Grotesque-Regular-Italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Brandon Grotesque';
+  src: url('/font/Brandon-Grotesque/Brandon-Grotesque-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Brandon Grotesque';
+  src: url('/font/Brandon-Grotesque/Brandon-Grotesque-Medium-Italic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Brandon Grotesque';
+  src: url('/font/Brandon-Grotesque/Brandon-Grotesque-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Brandon Grotesque';
+  src: url('/font/Brandon-Grotesque/Brandon-Grotesque-Bold-Italic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Brandon Grotesque';
+  src: url('/font/Brandon-Grotesque/Brandon-Grotesque-Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Brandon Grotesque';
+  src: url('/font/Brandon-Grotesque/Brandon-Grotesque-Black-Italic.otf') format('opentype');
+  font-weight: 900;
+  font-style: italic;
+}
+
+/* Gibson Font Family */
+@font-face {
+  font-family: 'Gibson';
+  src: url('/font/Demo_Fonts/Fontspring-DEMO-gibson-thin.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gibson';
+  src: url('/font/Demo_Fonts/Fontspring-DEMO-gibson-thinitalic.otf') format('opentype');
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Gibson';
+  src: url('/font/Demo_Fonts/Fontspring-DEMO-gibson-light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gibson';
+  src: url('/font/Demo_Fonts/Fontspring-DEMO-gibson-lightitalic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Gibson';
+  src: url('/font/Demo_Fonts/Fontspring-DEMO-gibson-regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gibson';
+  src: url('/font/Demo_Fonts/Fontspring-DEMO-gibson-italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Gibson';
+  src: url('/font/Demo_Fonts/Fontspring-DEMO-gibson-book.otf') format('opentype');
+  font-weight: 450;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gibson';
+  src: url('/font/Demo_Fonts/Fontspring-DEMO-gibson-bookitalic.otf') format('opentype');
+  font-weight: 450;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Gibson';
+  src: url('/font/Demo_Fonts/Fontspring-DEMO-gibson-medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gibson';
+  src: url('/font/Demo_Fonts/Fontspring-DEMO-gibson-mediumitalic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Gibson';
+  src: url('/font/Demo_Fonts/Fontspring-DEMO-gibson-semibold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gibson';
+  src: url('/font/Demo_Fonts/Fontspring-DEMO-gibson-semibolditalic.otf') format('opentype');
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Gibson';
+  src: url('/font/Demo_Fonts/Fontspring-DEMO-gibson-bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gibson';
+  src: url('/font/Demo_Fonts/Fontspring-DEMO-gibson-bolditalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Gibson';
+  src: url('/font/Demo_Fonts/Fontspring-DEMO-gibson-heavy.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gibson';
+  src: url('/font/Demo_Fonts/Fontspring-DEMO-gibson-heavyitalic.otf') format('opentype');
+  font-weight: 900;
+  font-style: italic;
+}

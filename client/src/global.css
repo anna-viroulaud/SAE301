@@ -1,4 +1,20 @@
 @import "tailwindcss";
+@import "./fonts.css";
+
+/* Police par défaut pour tout le site */
+body {
+  font-family: 'Brandon Grotesque', system-ui, sans-serif;
+}
+
+/* Appliquer Gibson aux paragraphes et textes */
+p, input, textarea, select {
+  font-family: 'Gibson', system-ui, sans-serif;
+}
+
+/* Brandon Grotesque pour les titres et boutons */
+h1, h2, h3, h4, h5, h6, button, a {
+  font-family: 'Brandon Grotesque', system-ui, sans-serif;
+}
 
 /* Small custom styles for burger behavior */
 .burger-btn { background: transparent; border: 0; padding: .25rem; display: inline-flex; align-items: center; }
