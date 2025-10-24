@@ -111,6 +111,39 @@ let HeaderView = {
       });
     }
 
+    // Mettre à jour le compteur du panier
+    const updateCartCounter = () => {
+      const counter = frag.querySelector("#cart-counter");
+      
+      if (counter) {
+        // Lire directement depuis localStorage
+        const cartData = localStorage.getItem('cart');
+        const cart = cartData ? JSON.parse(cartData) : [];
+        const totalItems = cart.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
+        
+        counter.textContent = totalItems;
+        
+        if (totalItems > 0) {
+          counter.style.display = "flex";
+        } else {
+          counter.style.display = "none";
+        }
+      }
+    };
+
+    // Initialiser le compteur au chargement
+    updateCartCounter();
+
+    // Écouter les mises à jour du panier (événement CustomEvent)
+    window.addEventListener("cart:updated", updateCartCounter);
+    
+    // Écouter les changements du localStorage (pour synchronisation multi-onglets)
+    window.addEventListener("storage", (e) => {
+      if (e.key === 'cart' || e.key === 'cart_lastUpdate') {
+        updateCartCounter();
+      }
+    });
+
     return frag;
   },
 };

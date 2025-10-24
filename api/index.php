@@ -8,6 +8,7 @@ require_once "src/Controller/ProductController.php";
 require_once "src/Controller/UserController.php";
 require_once "src/Controller/AuthController.php";
 require_once "src/Controller/CartController.php";
+require_once "src/Controller/CategoryController.php";
 require_once "src/Class/HttpRequest.php";
 
 session_start();
@@ -43,7 +44,8 @@ $router = [
     "products" => new ProductController(),
     "users" => new UserController(),
     "auth" => new AuthController(),
-    "carts" => new CartController()
+    "carts" => new CartController(),
+    "categories" => new CategoryController()
 ];
 
 // objet HttpRequest qui contient toutes les infos utiles sur la requêtes (voir class/HttpRequest.php)

@@ -5,19 +5,23 @@ require_once('Entity.php');
 class User extends Entity {
     private int $id;
     private ?string $username = null;
+    private ?string $firstName = null;
+    private ?string $lastName = null;
+    private ?string $dateOfBirth = null;
     private ?string $email = null;
     private ?string $passwordHash = null;
 
-    public function __construct(int $id = 0, ?string $username = null, ?string $email = null) {
+    public function __construct(int $id = 0) {
         $this->id = $id;
-        $this->username = $username;
-        $this->email = $email;
     }
 
     public function jsonSerialize(): mixed {
         return [
             "id" => $this->id,
-            "username" => $this->username,
+            "username" => $this->username, // Peut être null si pas utilisé
+            "firstName" => $this->firstName,
+            "lastName" => $this->lastName,
+            "dob" => $this->dateOfBirth,
             "email" => $this->email
         ];
     }
@@ -28,6 +32,15 @@ class User extends Entity {
 
     public function getUsername(): ?string { return $this->username; }
     public function setUsername(?string $v): void { $this->username = $v; }
+
+    public function getFirstName(): ?string { return $this->firstName; }
+    public function setFirstName(?string $v): void { $this->firstName = $v; }
+
+    public function getLastName(): ?string { return $this->lastName; }
+    public function setLastName(?string $v): void { $this->lastName = $v; }
+
+    public function getDateOfBirth(): ?string { return $this->dateOfBirth; }
+    public function setDateOfBirth(?string $v): void { $this->dateOfBirth = $v; }
 
     public function getEmail(): ?string { return $this->email; }
     public function setEmail(?string $v): void { $this->email = $v; }

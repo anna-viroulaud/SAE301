@@ -1,10 +1,27 @@
-<a href="/products/{{id}}/{{name}}" data-link class="mb-2 inline-block">
-    <article class="overflow-hidden rounded-md transition duration-300 grid grid-cols-1 gap-4">
-        <img src="/{{image}}" alt="{{name}}" class="mb-3 sm:h-70 lg:h-120 w-full object-cover rounded-sm" />
-        <h3 class="mb-1 text-sm font-semibold text-gray-800">{{name}}</h3>
-        <p class="mb-2 text-sm text-gray-900">
-        {{price}}€
-        <span class="text-sm font-normal text-gray-500"></span>
-        </p>
-    </article>
-</a>
+<article class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden relative">
+    <a href="/products/{{id}}/{{slug}}" data-link class="block">
+        <div class="relative">
+            <img src="/{{image}}" alt="{{name}}" loading="lazy" class="w-full h-64 object-cover" />
+        </div>
+        <div class="p-4">
+            <h3 class="mb-2 text-base font-semibold text-gray-800 line-clamp-2 hover:text-gray-600 transition-colors">
+                {{name}}
+            </h3>
+            <p class="text-xl font-bold text-gray-900 mb-3">{{price}}€</p>
+        </div>
+    </a>
+    
+    <!-- Bouton Ajouter au panier -->
+    <div class="px-4 pb-4">
+        <button 
+            class="add-to-cart-btn w-full bg-stone-800 hover:bg-stone-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors duration-200"
+            data-product-id="{{id}}"
+            data-product-name="{{name}}"
+            data-product-price="{{price}}"
+            data-product-image="{{image}}"
+            aria-label="Ajouter {{name}} au panier"
+        >
+            Ajouter au panier
+        </button>
+    </div>
+</article>

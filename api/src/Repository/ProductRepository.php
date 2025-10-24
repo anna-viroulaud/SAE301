@@ -44,7 +44,7 @@ class ProductRepository extends EntityRepository {
         $p->setImage($answer->image ?? null);
         $p->setDescription($answer->description ?? null);
 
-        $requete = $this->cnx->prepare("select * from ProductImage where product_id=:value"); // prepare la requête SQL
+        $imgReq = $this->cnx->prepare("select * from ProductImage where product_id=:value"); // prepare la requête SQL
         $productId = $p->getId();
         $imgReq->bindParam(':value', $productId);
         $imgReq->execute(); // execute la requête

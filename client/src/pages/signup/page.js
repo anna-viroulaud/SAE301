@@ -11,16 +11,24 @@ export function SignupPage() {
     e.preventDefault();
     errorDiv.textContent = "";
 
-    const username = form.username.value.trim();
+    const firstName = form.firstName.value.trim();
+    const lastName = form.lastName.value.trim();
     const email = form.email.value.trim();
+    const dateOfBirth = form.dateOfBirth.value;
     const password = form.password.value;
 
-    if (!username || !email || !password) {
+    if (!firstName || !lastName || !email || !dateOfBirth || !password) {
       errorDiv.textContent = "Veuillez remplir tous les champs.";
       return;
     }
 
-    const res = await UserData.signup({ username, email, password });
+    const res = await UserData.signup({ 
+      firstName, 
+      lastName, 
+      email, 
+      dateOfBirth,
+      password 
+    });
 
     if (res && !res.error) {
       sessionStorage.setItem("user", JSON.stringify(res));

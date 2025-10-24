@@ -3,10 +3,12 @@ import { postRequest, getRequest, patchRequest } from "../lib/api-request.js";
 let UserData = {};
 
 // signup -> POST /api/users (garde si ton back gère /users pour création)
-UserData.signup = async function({ username, email, password }) {
+UserData.signup = async function({ firstName, lastName, email, dateOfBirth, password }) {
   const fd = new FormData();
-  fd.append("username", username);
+  fd.append("firstName", firstName);
+  fd.append("lastName", lastName);
   fd.append("email", email);
+  fd.append("dateOfBirth", dateOfBirth);
   fd.append("password", password);
   return await postRequest("users", fd);
 };

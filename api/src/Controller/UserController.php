@@ -20,17 +20,42 @@ class UserController extends EntityController {
         $json = $request->getJson();
         $obj = json_decode($json);
 
+        // Si pas de JSON, essayer FormData ou $_POST
         if ($obj === null) {
-            $obj = (object)[
-                'username' => $request->getParam('username') ?? null,
-                'email'    => $request->getParam('email') ?? null,
-                'password' => $request->getParam('password') ?? null
-            ];
+            // Essayer de récupérer depuis $_POST (FormData)
+            if (!empty($_POST)) {
+                $obj = (object)$_POST;
+            } else {
+                // Sinon, utiliser getParam
+                $obj = (object)[
+                    'firstName' => $request->getParam('firstName') ?? null,
+                    'lastName' => $request->getParam('lastName') ?? null,
+                    'email' => $request->getParam('email') ?? null,
+                    'dateOfBirth' => $request->getParam('dateOfBirth') ?? null,
+                    'password' => $request->getParam('password') ?? null
+                ];
+            }
         }
 
+        // Debug pour voir ce qui arrive
+        error_log("UserController::signup - Données reçues: " . print_r($obj, true));
+
+        // Validation
         if (!isset($obj->email) || !isset($obj->password) || empty($obj->email) || empty($obj->password)) {
             http_response_code(400);
             return ["error" => "Email et mot de passe requis."];
+        }
+
+        if (!isset($obj->firstName) || empty(trim($obj->firstName))) {
+            http_response_code(400);
+            error_log("UserController::signup - firstName manquant ou vide");
+            return ["error" => "Le prénom est requis."];
+        }
+
+        if (!isset($obj->lastName) || empty(trim($obj->lastName))) {
+            http_response_code(400);
+            error_log("UserController::signup - lastName manquant ou vide");
+            return ["error" => "Le nom est requis."];
         }
 
         $email = trim($obj->email);
@@ -46,8 +71,19 @@ class UserController extends EntityController {
 
         $u = new User(0);
         $u->setEmail($email);
-        if (isset($obj->username) && $obj->username !== "") {
+        $u->setFirstName(trim($obj->firstName));
+        $u->setLastName(trim($obj->lastName));
+        
+        if (isset($obj->dateOfBirth) && !empty($obj->dateOfBirth)) {
+            $u->setDateOfBirth($obj->dateOfBirth);
+        }
+        
+        // Username optionnel (peut être généré à partir du prénom)
+        if (isset($obj->username) && !empty($obj->username)) {
             $u->setUsername(trim($obj->username));
+        } else {
+            // Générer un username par défaut
+            $u->setUsername(strtolower(trim($obj->firstName)));
         }
 
         // hachage du mot de passe
@@ -124,7 +160,19 @@ class UserController extends EntityController {
             return ["error" => "Utilisateur introuvable."];
         }
 
-        // champs modifiables : username, email, password (+ éventuels firstName/lastName/dob)
+        // champs modifiables : firstName, lastName, dateOfBirth, email, password
+        if (isset($obj->firstName)) {
+            $u->setFirstName(trim($obj->firstName));
+        }
+
+        if (isset($obj->lastName)) {
+            $u->setLastName(trim($obj->lastName));
+        }
+
+        if (isset($obj->dob)) {
+            $u->setDateOfBirth(trim($obj->dob));
+        }
+
         if (isset($obj->username)) {
             $u->setUsername(trim($obj->username));
         }
@@ -150,11 +198,6 @@ class UserController extends EntityController {
             }
             $u->setPasswordHash(password_hash($obj->password, PASSWORD_DEFAULT));
         }
-
-        // champs optionnels si votre User classe les supporte
-        if (isset($obj->firstName) && method_exists($u, 'setFirstName')) $u->setFirstName(trim($obj->firstName));
-        if (isset($obj->lastName)  && method_exists($u, 'setLastName'))  $u->setLastName(trim($obj->lastName));
-        if (isset($obj->dob)       && method_exists($u, 'setDob'))       $u->setDob(trim($obj->dob));
 
         $ok = $this->users->update($u);
         if (!$ok) {

@@ -26,10 +26,25 @@ class ProductController extends EntityController {
           
             // URI is .../products
             $cat = $request->getParam("category"); // is there a category parameter in the request ?
-            if ( $cat == false) // no request category, return all products
+            if ( $cat == false) {
+                // no request category, return all products
                 return $this->products->findAll();
-            else // return only products of category $cat
+            } else {
+                // return only products of category $cat (ID or slug)
+                // Si c'est un slug, on doit d'abord récupérer l'ID
+                if (!is_numeric($cat)) {
+                    require_once "src/Repository/CategoryRepository.php";
+                    $categoryRepo = new CategoryRepository();
+                    $category = $categoryRepo->findBySlug($cat);
+                    if ($category !== null) {
+                        $cat = $category->getId();
+                    } else {
+                        // Slug invalide, retourner tableau vide
+                        return [];
+                    }
+                }
                 return $this->products->findAllByCategory($cat);
+            }
         }
     }
 

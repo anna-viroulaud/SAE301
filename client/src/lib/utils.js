@@ -28,4 +28,22 @@ function htmlToFragment(htmlString) {
     return template.content;
 }
 
-export { genericRenderer, htmlToFragment };
+/**
+ * Converts a string to a URL-friendly slug.
+ *
+ * @param {string} text - The text to convert to a slug.
+ * @returns {string} - A URL-friendly slug (lowercase, hyphens, no special characters).
+ */
+function slugify(text) {
+    return text
+        .toString()
+        .toLowerCase()
+        .normalize('NFD')                   // Normalize accents
+        .replace(/[\u0300-\u036f]/g, '')    // Remove accents
+        .replace(/[^\w\s-]/g, '')           // Remove special characters
+        .trim()
+        .replace(/\s+/g, '-')               // Replace spaces with hyphens
+        .replace(/--+/g, '-');              // Replace multiple hyphens with single hyphen
+}
+
+export { genericRenderer, htmlToFragment, slugify };

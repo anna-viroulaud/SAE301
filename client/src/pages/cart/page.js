@@ -16,11 +16,30 @@ C.handlerRemoveItem = function(event){
     const productId = Number(event.currentTarget.dataset.id);
     CartData.removeFromCart(productId);
     
-    // Recharger la page du panier
-    const newFragment = C.init();
-    const appContainer = document.querySelector('#app');
-    appContainer.innerHTML = '';
-    appContainer.appendChild(newFragment);
+    // Récupérer les items mis à jour
+    const cartItems = CartData.getCart();
+    
+    // Si le panier est vide, tout reconstruire
+    if (cartItems.length === 0) {
+        const newFragment = C.init();
+        const mainContainer = document.querySelector('main');
+        if (mainContainer) {
+            mainContainer.replaceWith(newFragment.querySelector('main'));
+        }
+        V.nbItems(document);
+        return;
+    }
+    
+    // Sinon, juste mettre à jour la liste des produits
+    const productCartDOM = ProductCartView.dom(cartItems);
+    const listProducts = document.querySelector('#product-cart');
+    if (listProducts) {
+        listProducts.replaceWith(productCartDOM);
+        V.attachEvents(document);
+        V.nbItems(document);
+        V.updateAllProductsPrices(document);
+        V.updateTotalPrice();
+    }
 }
 
 C.handlerDecreaseQuantity = function(event){
@@ -141,9 +160,9 @@ V.attachEvents = function(fragment){
     }
 }
 
-V.nbItems = function(fragment){
+V.nbItems = function(fragmentOrDoc){
     let nbItems = CartData.getCart().length;
-    let cartCounter = fragment.querySelector('#nbItemsCart');
+    let cartCounter = (fragmentOrDoc || document).querySelector('#nbItemsCart');
     if(cartCounter){
         cartCounter.textContent = nbItems;
     }
@@ -161,8 +180,8 @@ V.updateProductPrice = function(element, quantity){
     }
 }
 
-V.updateAllProductsPrices = function(fragment){
-    const products = fragment.querySelectorAll('#product-cart-item');
+V.updateAllProductsPrices = function(fragmentOrDoc){
+    const products = (fragmentOrDoc || document).querySelectorAll('#product-cart-item');
     products.forEach(element => {
         const quantity = Number(element.querySelector('#quantity').textContent);
         V.updateProductPrice(element, quantity);
