@@ -8,6 +8,7 @@ import { ProductDetailPage } from "./pages/productDetail/page.js";
 import { LoginPage } from "./pages/login/page.js";
 import { SignupPage } from "./pages/signup/page.js";
 import { ProfilePage } from "./pages/profil/page.js";
+import { OrdersPage } from "./pages/orders/page.js";
 
 import { AccountPage } from "./pages/account/page.js";
 import { CartPage } from "./pages/cart/page.js";
@@ -46,6 +47,7 @@ router.addRoute("/login", LoginPage, { useLayout: false });
 router.addRoute("/signup", SignupPage, { useLayout: false });
 
 router.addRoute("/profile", ProfilePage, { requireAuth: true });
+router.addRoute("/orders", OrdersPage, { requireAuth: true });
 // router.addRoute("/account", AccountPage, { requireAuth: true });
 router.addRoute("/cart", CartPage, { requireAuth: true });
 router.addRoute("/order-confirmation/:id", OrderConfirmationPage, { requireAuth: true });

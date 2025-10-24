@@ -1,0 +1,41 @@
+<main class="max-w-7xl mx-auto px-4 py-8">
+    <!-- En-tête avec navigation entre profil et commandes -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-6">Mon Compte</h1>
+        
+        <!-- Navigation tabs -->
+        <div class="flex gap-4 border-b border-gray-200">
+            <a href="/profile" data-link class="px-4 py-2 text-gray-600 hover:text-gray-900 hover:border-b-2 hover:border-[#3f2f2a] transition">
+                Mes informations
+            </a>
+            <a href="/orders" data-link class="px-4 py-2 text-[#3f2f2a] border-b-2 border-[#3f2f2a] font-medium">
+                Mes commandes
+            </a>
+        </div>
+    </div>
+
+    <!-- Message d'erreur/info -->
+    <div id="ordersMsg" class="mb-4 text-sm text-red-600"></div>
+
+    <!-- Liste des commandes -->
+    <div id="ordersList" class="space-y-4">
+    </div>
+
+    <!-- Message si aucune commande -->
+    <div id="noOrders" class="text-center py-12 bg-gray-50 rounded-lg" style="display: none;">
+        <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+        </svg>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">Aucune commande</h3>
+        <p class="text-gray-600 mb-6">Vous n'avez pas encore passé de commande.</p>
+        <a href="/products" data-link class="inline-block bg-[#3f2f2a] text-white py-2 px-6 rounded hover:opacity-90 transition">
+            Découvrir nos produits
+        </a>
+    </div>
+
+    <!-- Loader -->
+    <div id="ordersLoader" class="text-center py-12">
+        <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#3f2f2a]"></div>
+        <p class="text-gray-600 mt-4">Chargement de vos commandes...</p>
+    </div>
+</main>

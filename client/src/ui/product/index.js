@@ -28,6 +28,14 @@ let ProductView = {
         const productPrice = btn.dataset.productPrice;
         const productImage = btn.dataset.productImage;
         
+        // Convertir le prix en nombre (supprimer les espaces, €, et remplacer , par .)
+        const priceNumber = parseFloat(
+          String(productPrice || '0')
+            .replace(/\s/g, '')  // Supprimer les espaces
+            .replace('€', '')     // Supprimer le symbole €
+            .replace(',', '.')    // Remplacer la virgule par un point
+        );
+        
         // Importer CartData dynamiquement
         const { CartData } = await import('../../data/cart.js');
         
@@ -35,7 +43,7 @@ let ProductView = {
         await CartData.addToCart({
           id: productId,
           name: productName,
-          price: productPrice,
+          price: priceNumber,
           image: productImage,
           quantity: 1
         });

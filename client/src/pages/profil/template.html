@@ -1,6 +1,22 @@
 <!-- Profile template — version compacte -->
-<div class="max-w-lg mx-auto mt-12 p-6 bg-[#FFFEF8] rounded shadow text-left">
-  <h1 class="text-xl font-bold mb-6 tracking-widest uppercase text-[#111]">Information Profile</h1>
+<main class="max-w-7xl mx-auto px-4 py-8">
+  <!-- En-tête avec navigation entre profil et commandes -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-6">Mon Compte</h1>
+    
+    <!-- Navigation tabs -->
+    <div class="flex gap-4 border-b border-gray-200">
+      <a href="/profile" data-link class="px-4 py-2 text-[#3f2f2a] border-b-2 border-[#3f2f2a] font-medium">
+        Mes informations
+      </a>
+      <a href="/orders" data-link class="px-4 py-2 text-gray-600 hover:text-gray-900 hover:border-b-2 hover:border-[#3f2f2a] transition">
+        Mes commandes
+      </a>
+    </div>
+  </div>
+
+  <div class="max-w-lg mx-auto p-6 bg-[#FFFEF8] rounded shadow text-left">
+    <h2 class="text-xl font-bold mb-6 tracking-widest uppercase text-[#111]">Informations Personnelles</h2>
 
   <form id="profileEditForm" class="space-y-4" style="display:block;">
     <input type="hidden" name="username" />
@@ -42,4 +58,5 @@
     <button id="editBtn" class="flex-1 bg-[#5c4433] text-white py-2 rounded uppercase font-semibold">Modifier</button>
     <button id="logoutBtn" class="flex-1 bg-gray-200 py-2 rounded uppercase font-semibold">Se déconnecter</button>
   </div>
-</div>
+  </div>
+</main>

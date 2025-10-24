@@ -96,12 +96,16 @@ CartData.syncWithServer = async function(userId) {
     }
     
     // Transformer les items du format localStorage au format API
-    const items = cartArray.map(item => ({
-        variantId: item.id,          // ID du produit/variante
-        productId: item.id,          // Alias pour compatibilité
-        quantity: item.quantity,     // Quantité
-        unitPrice: item.price        // Prix unitaire
-    }));
+    const items = cartArray.map(item => {
+        const price = parseFloat(item.price) || 0;
+        console.log(`Item ${item.name}: prix = ${item.price} → ${price}`);
+        return {
+            variantId: item.id,          // ID du produit/variante
+            productId: item.id,          // Alias pour compatibilité
+            quantity: item.quantity,     // Quantité
+            unitPrice: price             // Prix unitaire converti en nombre
+        };
+    });
     
     console.log("Synchronisation du panier:", { userId, items });
     
