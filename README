@@ -1,10 +1,24 @@
-Importer la base (minimaliste) SAE301 dans votre serveur de base de données.
+# 🛒 E-Commerce & Gestion de Stocks API
+> *Projet réalisé dans le cadre de la SAE 3.01 au BUT MMI.*
 
-Modifier les informations de connexion à la base dans api/class/Controller.php
+## 📝 Description
+Application web complète d'e-commerce avec un catalogue de produits interactif et une gestion dynamique des stocks. Le projet inclut le développement d'une API backend pour la manipulation des données et une interface frontend moderne (développée avec TailwindCSS) pour optimiser l'expérience utilisateur.
 
-Héberger l'api back sur mmi.unilim.fr
+## 🚀 Fonctionnalités principales
+- ✅ Catalogue de produits avec filtres et affichage des catégories.
+- ✅ Système de fiches produits avec galerie d'images et descriptions.
+- ✅ Système de panier et sauvegarde des commandes utilisateur.
+- ✅ API REST (Back-office) pour la gestion et l'affichage des stocks en temps réel.
+- ✅ Architecture MVC et design 100% responsive.
 
-Front : 
+## 🛠️ Technologies utilisées
+- **Front-end :** HTML, JavaScript, TailwindCSS
+- **Back-end :** PHP, API REST
+- **Base de données :** MySQL
 
-    - dev : npm i / npm run dev en local depuis votre machine
-    - prod : npm run build / puis hébergement des fichiers statiques (dist/) sur mmi.unilim.fr
+
+## 💻 Installation en local
+1. Cloner le dépôt : `git clone [URL_DU_DEPOT]`
+2. Importer la base de données `SAE301.sql` dans votre serveur local (ex: phpMyAdmin).
+3. Configurer les informations de connexion à la base dans `api/class/Controller.php`.
+4. Lancer le frontend (dev) : `npm i` puis `npm run dev`.
